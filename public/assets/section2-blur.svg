@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="2095.6" height="505.6" viewBox="0 0 2095.6 505.6" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Blur Elipse" filter="url(#filter0_f_0_5)">
+<path d="M1915.3 252.8C1915.3 292.841 1526.91 325.3 1047.8 325.3C568.693 325.3 180.3 292.841 180.3 252.8C180.3 212.759 568.693 180.3 1047.8 180.3C1526.91 180.3 1915.3 212.759 1915.3 252.8Z" fill="#55D2FF"/>
+</g>
+<defs>
+<filter id="filter0_f_0_5" x="0" y="0" width="2095.6" height="505.6" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="90.15" result="effect1_foregroundBlur_0_5"/>
+</filter>
+</defs>
+</svg>
