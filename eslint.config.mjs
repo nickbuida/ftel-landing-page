@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "Desktop-landing/**",
+    "Mobile-landing/**",
+    "FTEL LANDING PAGE/**",
+    "__MACOSX/**",
   ]),
 ]);
 

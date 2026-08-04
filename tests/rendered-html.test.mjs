@@ -1,11 +1,6 @@
 import assert from "node:assert/strict";
-import { access, readFile, readdir } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import test from "node:test";
-
-const developmentPreviewMeta =
-  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
-const templateRoot = new URL("../", import.meta.url);
-const previewRoot = new URL("../app/_sites-preview/", import.meta.url);
 
 async function render() {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
@@ -28,64 +23,80 @@ async function render() {
   );
 }
 
-test("server-renders the starter loading skeleton", async () => {
+test("server-renders the FPT Telecom Career Booming page", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, developmentPreviewMeta);
-  assert.match(html, /<title>Your site is taking shape<\/title>/i);
-  assert.match(html, /Building your site/);
-  assert.match(html, /Your site is taking shape/);
-  assert.match(
-    html,
-    /Your first version will appear here automatically when it’s ready\./,
-  );
-  assert.doesNotMatch(html, /Codex/);
-  assert.match(html, /react-loading-skeleton/);
-  assert.match(html, /role="status"/);
+  assert.match(html, /<html lang="vi">/i);
+  assert.match(html, /<title>FPT Telecom Career Booming<\/title>/i);
+  assert.match(html, /Khám phá vũ trụ cơ hội nghề nghiệp/);
+  assert.match(html, /Đặc quyền thực tế bạn nhận được/);
+  assert.match(html, /Hành trình đồng hành kiến tạo tương lai/);
+  assert.match(html, /Vũ trụ nghề nghiệp tại FPT Telecom/);
+  assert.match(html, /Tôi đồng ý nhận thông tin việc làm và các cơ hội sự nghiệp từ FPT Telecom\./);
+  assert.match(html, /class="footer-container"/);
+  assert.match(html, /Kết nối với chúng tôi/);
+  assert.doesNotMatch(html, /Building your site|Your site is taking shape/);
 });
 
-test("keeps the loading skeleton scoped and disposable", async () => {
-  const [preview, css, page, layout, packageJson, files] = await Promise.all([
-    readFile(new URL("SkeletonPreview.tsx", previewRoot), "utf8"),
-    readFile(new URL("preview.css", previewRoot), "utf8"),
+test("keeps the audited Figma frame and original assets in place", async () => {
+  const [css, page] = await Promise.all([
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../app/layout.tsx", import.meta.url), "utf8"),
-    readFile(new URL("../package.json", import.meta.url), "utf8"),
-    readdir(previewRoot),
   ]);
 
-  assert.deepEqual(files.sort(), ["SkeletonPreview.tsx", "preview.css"]);
-  assert.match(preview, /from "react-loading-skeleton"/);
-  assert.match(preview, /baseColor="#eceae7"/);
-  assert.match(preview, /highlightColor="#f9f8f6"/);
-  assert.match(preview, /duration=\{2\.8\}/);
-  assert.match(preview, /sites-skeleton-search-placeholder/);
-  assert.match(packageJson, /"react-loading-skeleton": "3\.5\.0"/);
+  assert.match(css, /\.desktop-canvas\s*\{[^}]*width:\s*1440px;[^}]*min-height:\s*5200px;/s);
+  assert.match(css, /\.hero\s*\{[^}]*top:\s*80px;[^}]*width:\s*1440px;[^}]*height:\s*624px;/s);
+  assert.match(css, /\.about\s*\{[^}]*left:\s*135px;[^}]*top:\s*630px;[^}]*width:\s*1169px;[^}]*height:\s*300px;/s);
+  assert.match(css, /\.connect\s*\{[^}]*left:\s*1px;[^}]*top:\s*3385px;[^}]*width:\s*1440px;[^}]*height:\s*827px;/s);
+  assert.match(css, /\.footer-container\s*\{[^}]*left:\s*0;[^}]*top:\s*4212px;[^}]*width:\s*1440px;/s);
+  assert.match(css, /font-family:\s*"SVN-Gilroy"/);
 
-  const shellIndex = preview.indexOf('className="sites-skeleton-shell"');
-  const statusIndex = preview.indexOf('className="sites-skeleton-status"');
-  assert.ok(shellIndex >= 0 && statusIndex > shellIndex);
-  assert.match(css, /position:\s*fixed/);
-  assert.match(css, /inset:\s*0/);
-  assert.match(css, /opacity:\s*0\.52/);
-  assert.match(css, /prefers-reduced-motion:\s*reduce/);
-  assert.doesNotMatch(css, /#020617|canvas|pets|progress/i);
-  assert.doesNotMatch(
-    preview,
-    /loading-spinner|status-mark|status-progress|canvas|cookie|random/i,
-  );
+  for (const asset of [
+    "hero-back.png",
+    "hero-headline.png",
+    "hero-people.png",
+    "section2-headline.png",
+    "privilege-headline.png",
+    "journey-headline.png",
+    "jobs-headline.png",
+    "form-headline.png",
+    "footer-top.png",
+  ]) {
+    assert.match(page, new RegExp(`/assets/${asset.replace(".", "\\.")}`));
+    await access(new URL(`../public/assets/${asset}`, import.meta.url));
+  }
+});
 
-  assert.match(page, /export const metadata:\s*Metadata/);
-  assert.match(page, /"codex-preview": "development"/);
-  assert.match(page, /<SkeletonPreview \/>/);
-  assert.match(layout, /title:\s*"Starter Project"/);
-  assert.doesNotMatch(layout, /codex-preview|_sites-preview|themeColor|\bViewport\b/);
-  assert.doesNotMatch(css, /(^|\s)(html|body)\s*\{/m);
+test("adapts the same page tree to the mobile handoff", async () => {
+  const [css, page] = await Promise.all([
+    readFile(new URL("../app/globals.css", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+  ]);
 
-  await assert.rejects(
-    access(new URL("public/_sites-preview", templateRoot)),
-  );
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.desktop-canvas\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*auto;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero\s*\{[^}]*top:\s*72px;[^}]*width:\s*100%;[^}]*height:\s*670px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*top:\s*20px;[^}]*height:\s*354px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.connect\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;[^}]*height:\s*auto;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-container\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;/s);
+  assert.doesNotMatch(page, /function MobilePage|<MobilePage/);
+  assert.equal((page.match(/className="desktop-canvas"/g) ?? []).length, 1);
+  assert.match(page, /Vuốt để khám phá thêm/);
+  assert.match(page, /const jobCategories: JobCategory\[\] = \[/);
+  assert.match(page, /openCategory, setOpenCategory\] = useState\(jobCategories\[0\]\.id\)/);
+
+  for (const asset of [
+    "hero-headline.png",
+    "brand-headline.png",
+    "benefits-headline.png",
+    "journey-headline.png",
+    "jobs-headline.png",
+    "form-header.png",
+    "fpt-logo.png",
+  ]) {
+    assert.match(page, new RegExp(`/assets/mobile/${asset.replace(".", "\\.")}`));
+    await access(new URL(`../public/assets/mobile/${asset}`, import.meta.url));
+  }
 });

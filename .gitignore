@@ -40,3 +40,10 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# Local design handoff exports and duplicate archive contents
+/Desktop-landing/
+/Mobile-landing/
+/FTEL LANDING PAGE/
+/__MACOSX/
+/tests/rendered-html.test 2.mjs
