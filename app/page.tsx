@@ -420,15 +420,52 @@ function Privileges() {
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
 
   const handleScroll = () => {
-    if (!trackRef.current) return;
-    const cardWidth = 326;
-    setActive(Math.max(0, Math.min(cards.length - 1, Math.round(trackRef.current.scrollLeft / cardWidth))));
+    const track = trackRef.current;
+    if (!track) return;
+    const firstCard = track.querySelector<HTMLElement>(".privilege-card");
+    const cardStep = (firstCard?.offsetWidth ?? 310) + 16;
+    setActive(Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / cardStep))));
   };
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (
+      autoPaused ||
+      !track ||
+      track.clientWidth >= 600 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      const firstCard = track.querySelector<HTMLElement>(".privilege-card");
+      const cardStep = (firstCard?.offsetWidth ?? 310) + 16;
+      const cardCount = track.querySelectorAll(".privilege-card").length;
+      const nextIndex = active >= cardCount - 1 ? 0 : active + 1;
+
+      setActive(nextIndex);
+      track.scrollTo({ left: nextIndex * cardStep, behavior: "smooth" });
+    }, 4500);
+
+    return () => window.clearTimeout(timer);
+  }, [active, autoPaused]);
+
   return (
-    <section className="privileges">
+    <section
+      className="privileges"
+      onMouseEnter={() => setAutoPaused(true)}
+      onMouseLeave={() => setAutoPaused(false)}
+      onFocusCapture={() => setAutoPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setAutoPaused(false);
+        }
+      }}
+    >
       <div className="privilege-title">
         <picture>
           <source media="(max-width: 767px)" srcSet="/assets/mobile/benefits-headline.png" />
@@ -467,13 +504,46 @@ function Privileges() {
 
 function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }) {
   const [start, setStart] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const desktopVisibleCards = 3;
+  const desktopMaxStart = journeyCards.length - desktopVisibleCards;
+  const desktopStart = Math.min(start, desktopMaxStart);
+  const atDesktopStart = desktopStart === 0;
+  const atDesktopEnd = desktopStart === desktopMaxStart;
+
+  useEffect(() => {
+    if (autoPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setTimeout(() => {
+      const carousel = carouselRef.current;
+      if (!carousel) return;
+
+      const isMobile = carousel.clientWidth < 600;
+      const firstCard = carousel.querySelector<HTMLElement>(".journey-card");
+      const itemWidth = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+      const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+      const currentStart = Math.min(start, maxStart);
+      const nextIndex = currentStart >= maxStart ? 0 : currentStart + 1;
+
+      setStart(nextIndex);
+      carousel.scrollTo({
+        left: nextIndex * itemWidth,
+        behavior: "smooth",
+      });
+    }, 4500);
+
+    return () => window.clearTimeout(timer);
+  }, [autoPaused, desktopMaxStart, start]);
 
   const moveCarousel = (step: number) => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-    const itemWidth = carousel.clientWidth < 600 ? 326 : 400;
-    const nextIndex = Math.max(0, Math.min(journeyCards.length - 1, start + step));
+    const isMobile = carousel.clientWidth < 600;
+    const firstCard = carousel.querySelector<HTMLElement>(".journey-card");
+    const itemWidth = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+    const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+    const nextIndex = Math.max(0, Math.min(maxStart, start + step));
     setStart(nextIndex);
     carousel.scrollTo({
       left: nextIndex * itemWidth,
@@ -482,7 +552,18 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
   };
 
   return (
-    <section className="journey" id="journey">
+    <section
+      className="journey"
+      id="journey"
+      onMouseEnter={() => setAutoPaused(true)}
+      onMouseLeave={() => setAutoPaused(false)}
+      onFocusCapture={() => setAutoPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setAutoPaused(false);
+        }
+      }}
+    >
       <div className="journey-heading">
         <picture>
           <source media="(max-width: 767px)" srcSet="/assets/mobile/journey-headline.png" />
@@ -499,16 +580,20 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
         type="button"
         aria-label="Chương trình trước"
         onClick={() => moveCarousel(-1)}
+        disabled={atDesktopStart}
       >
         <img src="/assets/chevron-left.svg" alt="" />
       </button>
 
       <div
-        className="journey-cards"
+        className={`journey-cards ${atDesktopStart ? "fade-right" : atDesktopEnd ? "fade-left" : "fade-both"}`}
         ref={carouselRef}
         onScroll={(e) => {
-          const step = e.currentTarget.clientWidth < 600 ? 326 : 400;
-          setStart(Math.min(journeyCards.length - 1, Math.round(e.currentTarget.scrollLeft / step)));
+          const isMobile = e.currentTarget.clientWidth < 600;
+          const firstCard = e.currentTarget.querySelector<HTMLElement>(".journey-card");
+          const step = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+          const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+          setStart(Math.min(maxStart, Math.round(e.currentTarget.scrollLeft / step)));
         }}
       >
         {journeyCards.map((card, idx) => (
@@ -538,17 +623,33 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
         type="button"
         aria-label="Chương trình tiếp theo"
         onClick={() => moveCarousel(1)}
+        disabled={atDesktopEnd}
       >
         <img src="/assets/chevron-right.svg" alt="" />
       </button>
 
-      <div className="dots" aria-hidden="true">
+      <div className="dots" role="group" aria-label="Vị trí băng chuyền chương trình">
+        {Array.from({ length: desktopMaxStart + 1 }, (_, index) => (
+          <button
+            type="button"
+            key={index}
+            className={index === desktopStart ? "active" : ""}
+            aria-label={`Hiển thị chương trình ${index + 1} đến ${index + desktopVisibleCards}`}
+            aria-current={index === desktopStart ? "true" : undefined}
+            onClick={() => moveCarousel(index - desktopStart)}
+          />
+        ))}
+      </div>
+
+      <div className="mobile-journey-pagination" role="group" aria-label="Vị trí chương trình trên thiết bị di động">
         {journeyCards.map((_, index) => (
-          <span
+          <button
+            type="button"
             key={index}
             className={index === start ? "active" : ""}
+            aria-label={`Hiển thị chương trình ${index + 1} trên ${journeyCards.length}`}
+            aria-current={index === start ? "true" : undefined}
             onClick={() => moveCarousel(index - start)}
-            style={{ cursor: "pointer" }}
           />
         ))}
       </div>
@@ -721,7 +822,7 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
       </div>
 
       <p className="connect-subtitle">
-        Để lại thông tin ngay, đội ngũ Tuyển dụng sẽ gửi đến bạn những cơ hội đo ni đóng giày theo đúng ngành học!
+        Để lại thông tin ngay, đội ngũ Tuyển dụng sẽ gửi đến<br className="mobile-connect-break" /> bạn những cơ hội đo ni đóng giày theo đúng ngành học!
       </p>
 
       <form className="connect-form" id="connect-form" onSubmit={handleSubmit}>
@@ -883,6 +984,10 @@ function Footer() {
 
       {/* Main Corporate Footer */}
       <div className="footer-body">
+        <div className="footer-left-bands" aria-hidden="true">
+          <img src="/assets/footer-bottom.png" alt="" />
+        </div>
+
         <div className="company-header-card">
           <img src="/assets/logo.png" alt="FPT Telecom" className="footer-logo" />
           <div className="company-titles">
@@ -989,12 +1094,27 @@ function Footer() {
               </div>
             )}
           </div>
+
+          <div className="footer-accordion-item">
+            <button type="button" className="accordion-toggle" onClick={() => toggleSection("students")}>
+              <span>Dành cho sinh viên</span>
+              <span>{openSection === "students" ? "▲" : "▼"}</span>
+            </button>
+            {openSection === "students" && (
+              <div className="accordion-content">
+                <p>Chương trình thực tập</p>
+                <p>FPT Tour</p>
+                <p>Career Talk &amp; Hội thảo định hướng</p>
+                <p>Hợp tác cùng các trường đại học</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer Social & Meta Bar */}
         <div className="footer-meta-bar">
           <div className="meta-left">
-            <span>Theo dõi các kênh chính thức của FPT Telecom</span>
+            <span>Theo dõi các kênh chính thức<br className="mobile-meta-break" /> của FPT Telecom</span>
             <div className="social-icons">
               <a href="https://facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook /></a>
               <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><IconTikTok /></a>

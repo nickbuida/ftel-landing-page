@@ -47,12 +47,44 @@ test("keeps the audited Figma frame and original assets in place", async () => {
     readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
   ]);
 
-  assert.match(css, /\.desktop-canvas\s*\{[^}]*width:\s*1440px;[^}]*min-height:\s*5200px;/s);
+  assert.match(css, /\.desktop-canvas\s*\{[^}]*width:\s*1440px;[^}]*min-height:\s*5048px;/s);
   assert.match(css, /\.hero\s*\{[^}]*top:\s*80px;[^}]*width:\s*1440px;[^}]*height:\s*624px;/s);
   assert.match(css, /\.about\s*\{[^}]*left:\s*135px;[^}]*top:\s*630px;[^}]*width:\s*1169px;[^}]*height:\s*300px;/s);
-  assert.match(css, /\.connect\s*\{[^}]*left:\s*1px;[^}]*top:\s*3385px;[^}]*width:\s*1440px;[^}]*height:\s*827px;/s);
+  assert.match(css, /\.connect\s*\{[^}]*left:\s*0;[^}]*top:\s*3383px;[^}]*width:\s*1440px;[^}]*height:\s*829px;/s);
   assert.match(css, /\.footer-container\s*\{[^}]*left:\s*0;[^}]*top:\s*4212px;[^}]*width:\s*1440px;/s);
-  assert.match(css, /font-family:\s*"SVN-Gilroy"/);
+  assert.match(css, /font-family:\s*"FTEL Sans";[\s\S]*?src:\s*url\('\/assets\/inter-vietnamese\.woff2'\)[\s\S]*?unicode-range:[^;}]*U\+1EA0-1EF9/);
+  assert.match(css, /src:\s*url\('\/assets\/inter-latin-ext\.woff2'\)/);
+  assert.match(css, /src:\s*url\('\/assets\/inter-latin\.woff2'\)/);
+  assert.match(css, /body\s*\{[^}]*font-family:\s*"FTEL Sans",\s*"Segoe UI",\s*Arial,\s*sans-serif;/s);
+  assert.match(css, /\.trust-bar strong\s*\{[^}]*font-family:\s*inherit;/s);
+  assert.match(css, /\.register\s*\{[^}]*white-space:\s*nowrap;/s);
+  assert.match(css, /\.contact-mascot\s*\{[^}]*overflow:\s*hidden;/s);
+  assert.match(css, /\.contact-card\s*\{[^}]*height:\s*220px;/s);
+  assert.match(css, /\.contact-mascot\s*\{[^}]*top:\s*0;[^}]*bottom:\s*0;/s);
+  assert.match(css, /\.company-titles\s*\{[^}]*margin-left:\s*auto;[^}]*text-align:\s*right;/s);
+  assert.match(css, /\.footer-columns-desktop\s*>\s*\.footer-col:not\(\.col-main\)\s*\{[^}]*text-align:\s*right;/s);
+  assert.match(page, /className="footer-left-bands"/);
+  assert.match(page, /footer-left-bands[\s\S]*?\/assets\/footer-bottom\.png/);
+  assert.match(css, /\.footer-left-bands img\s*\{[^}]*mix-blend-mode:\s*multiply;/s);
+  assert.doesNotMatch(css, /src:\s*local\(/);
+  assert.match(page, /desktopVisibleCards = 3/);
+  assert.match(page, /Array\.from\(\{ length: desktopMaxStart \+ 1 \}/);
+  assert.match(page, /disabled=\{atDesktopStart\}/);
+  assert.match(page, /disabled=\{atDesktopEnd\}/);
+  assert.match(page, /fade-right[\s\S]*fade-left[\s\S]*fade-both/);
+  assert.match(css, /\.carousel-arrow:disabled[^}]*background:\s*#cbd5e1;/s);
+  assert.match(page, /window\.setTimeout[\s\S]*4500/);
+  assert.match(page, /prefers-reduced-motion:\s*reduce/);
+  assert.match(page, /onMouseEnter=\{\(\) => setAutoPaused\(true\)\}/);
+  assert.match(css, /@media \(min-width:\s*1440px\)[\s\S]*?\.page-shell\s*\{[^}]*width:\s*100%;[^}]*height:\s*350\.5555556vw;[^}]*overflow:\s*clip;[^}]*\}[\s\S]*?\.desktop-canvas\s*\{[^}]*margin:\s*0;[^}]*transform:\s*scale\(calc\(100vw \/ 1440px\)\);[^}]*transform-origin:\s*top left;/s);
+
+  for (const font of [
+    "inter-vietnamese.woff2",
+    "inter-latin-ext.woff2",
+    "inter-latin.woff2",
+  ]) {
+    await access(new URL(`../public/assets/${font}`, import.meta.url));
+  }
 
   for (const asset of [
     "hero-back.png",
@@ -78,7 +110,19 @@ test("adapts the same page tree to the mobile handoff", async () => {
 
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.desktop-canvas\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*auto;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero\s*\{[^}]*top:\s*72px;[^}]*width:\s*100%;[^}]*height:\s*670px;/s);
-  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*top:\s*20px;[^}]*height:\s*354px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-back\s*\{[^}]*top:\s*-40px;[^}]*width:\s*1073\.693px;[^}]*height:\s*787px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-title img\s*\{[^}]*left:\s*-11\.61%;[^}]*top:\s*-24\.24%;[^}]*width:\s*174\.91%;[^}]*height:\s*219\.96%;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-people\s*\{[^}]*top:\s*371px;[^}]*width:\s*334\.8px;[^}]*height:\s*324px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.decorative-background\s*\{[^}]*top:\s*661px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.background-buildings\s*\{[^}]*left:\s*0;[^}]*top:\s*394px;[^}]*width:\s*100%;[^}]*height:\s*auto;[^}]*aspect-ratio:\s*390 \/ 179;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.background-pattern\s*\{[^}]*top:\s*0;[^}]*height:\s*198px;[^}]*\}[\s\S]*?\.background-pattern img\s*\{[^}]*left:\s*-5\.61px;[^}]*top:\s*-121\.67px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*top:\s*-9px;[^}]*height:\s*354px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about-title\s*\{[^}]*left:\s*20px;[^}]*top:\s*20px;[^}]*aspect-ratio:\s*302 \/ 119;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar\s*\{[^}]*grid-template-columns:\s*minmax\(0,74px\) 0 minmax\(0,74px\) 0 minmax\(0,74px\);[^}]*justify-content:\s*space-between;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar \.stat-cyan strong\s*\{[^}]*color:\s*#ff5a01;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.mobile-about-ellipse\s*\{[^}]*left:\s*50%;[^}]*top:\s*239px;[^}]*width:\s*700px;[^}]*height:\s*151px;/s);
+  assert.match(css, /@media \(max-width:\s*379px\)[\s\S]*?\.about\s*\{[^}]*height:\s*385px;[^}]*\}[\s\S]*?\.trust-bar\s*\{[^}]*top:\s*270px;/s);
+  assert.match(css, /@media \(max-width:\s*359px\)[\s\S]*?\.trust-bar\s*\{[^}]*left:\s*8px;[^}]*width:\s*calc\(100% - 16px\);/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.connect\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;[^}]*height:\s*auto;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-container\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;/s);
   assert.doesNotMatch(page, /function MobilePage|<MobilePage/);
@@ -86,6 +130,35 @@ test("adapts the same page tree to the mobile handoff", async () => {
   assert.match(page, /Vuốt để khám phá thêm/);
   assert.match(page, /const jobCategories: JobCategory\[\] = \[/);
   assert.match(page, /openCategory, setOpenCategory\] = useState\(jobCategories\[0\]\.id\)/);
+  assert.match(page, /toggleSection\("students"\)[\s\S]*?Dành cho sinh viên/);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.company-header-card\s*\{[^}]*align-items:\s*flex-start;[^}]*text-align:\s*left;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.company-titles h3\s*\{[^}]*font-size:\s*clamp\(12px,3\.9vw,16px\);[^}]*white-space:\s*nowrap;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-meta-bar\s*\{[^}]*align-items:\s*flex-start;[^}]*text-align:\s*left;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-meta-bar\s*\{[^}]*gap:\s*24px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.meta-left\s*\{[^}]*gap:\s*14px;[\s\S]*?\.meta-middle\s*\{[^}]*gap:\s*12px;/s);
+  assert.match(page, /Theo dõi các kênh chính thức<br className="mobile-meta-break" \/> của FPT Telecom/);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-bottom-copy\s*\{[^}]*text-align:\s*left;/s);
+  assert.match(page, /const \[autoPaused, setAutoPaused\] = useState\(false\);[\s\S]*?track\.clientWidth >= 600[\s\S]*?window\.setTimeout[\s\S]*?4500/);
+  assert.match(css, /\.privilege-cards\s*\{[^}]*--privilege-card-width:\s*min\(310px,calc\(100vw - 48px\)\);[^}]*padding-inline:\s*calc\(\(100vw - var\(--privilege-card-width\)\) \/ 2\);/s);
+  assert.match(css, /\.privilege-card:nth-child\(1\) \.privilege-shade\s*\{[^}]*#0995ff 100%/s);
+  assert.match(css, /\.privilege-card:nth-child\(2\) \.privilege-shade\s*\{[^}]*#10c24d 100%/s);
+  assert.match(css, /\.privilege-card:nth-child\(3\) \.privilege-shade\s*\{[^}]*#ff5f00 100%/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.privilege-title img\s*\{[^}]*left:\s*-73px;[^}]*top:\s*-37px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey\s*\{[^}]*padding-top:\s*16px;[^}]*padding-bottom:\s*56px;[^}]*overflow:\s*hidden;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey::before\s*\{[^}]*top:\s*8px;[^}]*cloud-2\.png[^}]*opacity:\s*\.18;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey::after\s*\{[^}]*top:\s*58px;[^}]*cloud-2\.png[^}]*opacity:\s*\.14;/s);
+  assert.match(css, /\.journey-cards\s*\{[^}]*--journey-card-width:\s*min\(310px,calc\(100vw - 48px\)\);[^}]*padding-inline:\s*calc\(\(100vw - var\(--journey-card-width\)\) \/ 2\);/s);
+  assert.match(css, /\.journey-pattern\s*\{[^}]*top:\s*215px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey-heading img\s*\{[^}]*left:\s*-68px;[^}]*top:\s*-17px;/s);
+  assert.match(page, /className="mobile-journey-pagination"[\s\S]*?journeyCards\.map/);
+  assert.match(page, /const firstCard = carousel\.querySelector<HTMLElement>\("\.journey-card"\);[\s\S]*?firstCard\?\.offsetWidth/);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.jobs\s*\{[^}]*padding-top:\s*12px;[^}]*isolation:\s*isolate;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.jobs::before\s*\{[^}]*cloud-2\.png[^}]*opacity:\s*\.18;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.jobs::after\s*\{[^}]*cloud-2\.png[^}]*opacity:\s*\.14;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.jobs-heading img\s*\{[^}]*left:\s*-60px;[^}]*top:\s*-40px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.connect-heading img\s*\{[^}]*left:\s*-54px;[^}]*top:\s*-39px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.connect-subtitle\s*\{[^}]*width:\s*calc\(100% \+ 24px\);[^}]*font-size:\s*clamp\(10px,calc\(4vw - 2\.6px\),13px\);/s);
+  assert.match(page, /sẽ gửi đến<br className="mobile-connect-break" \/> bạn những cơ hội/);
 
   for (const asset of [
     "hero-headline.png",
