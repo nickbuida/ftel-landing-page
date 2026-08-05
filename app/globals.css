@@ -220,11 +220,8 @@ button { cursor: pointer; }
 
 /* Main Corporate Footer Body */
 .footer-body { position: relative; width: 1170px; margin: 0 auto; padding-bottom: 40px; }
-.footer-left-bands { position: absolute; left: -135px; top: 146px; width: 135px; height: 210px; overflow: hidden; pointer-events: none; }
-.footer-band { position: absolute; display: block; border-radius: 999px; }
-.footer-band-blue { left: -108px; top: 0; width: 238px; height: 70px; background: #3473e8; }
-.footer-band-orange { left: -92px; top: 88px; width: 194px; height: 54px; background: #ff6515; }
-.footer-band-green { left: -70px; top: 166px; width: 102px; height: 42px; background: #009c45; }
+.footer-left-bands { position: absolute; left: -130px; top: 100px; width: 200px; height: 200px; overflow: hidden; pointer-events: none; }
+.footer-wifi-svg { width: 200px; height: 200px; display: block; }
 .company-header-card { background: #fff; border-radius: 16px; padding: 20px 28px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border: 1px solid #eef2f7; box-shadow: 0 2px 8px rgba(0,0,0,0.03); margin-bottom: 32px; }
 .footer-logo { height: 42px; width: auto; object-fit: contain; }
 .company-titles { margin-left: auto; text-align: right; }

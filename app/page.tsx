@@ -1136,9 +1136,15 @@ function Footer() {
       {/* Main Corporate Footer */}
       <div className="footer-body">
         <div className="footer-left-bands" aria-hidden="true">
-          <span className="footer-band footer-band-blue" />
-          <span className="footer-band footer-band-orange" />
-          <span className="footer-band footer-band-green" />
+          {/* WiFi signal arcs — three concentric quarter-circles from bottom-left */}
+          <svg className="footer-wifi-svg" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Outer arc — blue */}
+            <path d="M 0 160 A 150 150 0 0 1 150 10" stroke="#3473e8" strokeWidth="28" strokeLinecap="round" fill="none" />
+            {/* Middle arc — orange */}
+            <path d="M 0 160 A 100 100 0 0 1 100 60" stroke="#ff6515" strokeWidth="22" strokeLinecap="round" fill="none" />
+            {/* Inner arc — green */}
+            <path d="M 0 160 A 50 50 0 0 1 50 110" stroke="#009c45" strokeWidth="18" strokeLinecap="round" fill="none" />
+          </svg>
         </div>
 
         <div className="company-header-card">
