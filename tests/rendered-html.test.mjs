@@ -50,6 +50,7 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(css, /\.desktop-canvas\s*\{[^}]*width:\s*1440px;[^}]*min-height:\s*5048px;/s);
   assert.match(css, /\.hero\s*\{[^}]*top:\s*80px;[^}]*width:\s*1440px;[^}]*height:\s*624px;/s);
   assert.match(css, /\.about\s*\{[^}]*left:\s*135px;[^}]*top:\s*630px;[^}]*width:\s*1169px;[^}]*height:\s*300px;/s);
+  assert.match(css, /\.about > p\s*\{[^}]*left:\s*563px;[^}]*top:\s*194px;/s);
   assert.match(css, /\.connect\s*\{[^}]*left:\s*0;[^}]*top:\s*3383px;[^}]*width:\s*1440px;[^}]*height:\s*829px;/s);
   assert.match(css, /\.footer-container\s*\{[^}]*left:\s*0;[^}]*top:\s*4212px;[^}]*width:\s*1440px;/s);
   assert.match(css, /font-family:\s*"FTEL Sans";[\s\S]*?src:\s*url\('\/assets\/inter-vietnamese\.woff2'\)[\s\S]*?unicode-range:[^;}]*U\+1EA0-1EF9/);
@@ -65,7 +66,16 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(css, /\.footer-columns-desktop\s*>\s*\.footer-col:not\(\.col-main\)\s*\{[^}]*text-align:\s*right;/s);
   assert.match(page, /className="footer-left-bands"/);
   assert.match(page, /footer-left-bands[\s\S]*?\/assets\/footer-bottom\.png/);
-  assert.match(css, /\.footer-left-bands img\s*\{[^}]*mix-blend-mode:\s*multiply;/s);
+  assert.match(css, /\.footer-left-bands\s*\{[^}]*left:\s*-135px;[^}]*width:\s*118px;[^}]*overflow:\s*hidden;/s);
+  assert.match(css, /\.footer-left-bands img\s*\{[^}]*top:\s*-154px;[^}]*width:\s*1440px;[^}]*mix-blend-mode:\s*multiply;/s);
+  assert.match(page, /https:\/\/www\.tiktok\.com\/@tuyendungfpttelecom/g);
+  assert.match(page, /href="https:\/\/www\.linkedin\.com\/company\/fpt-telecom"[^>]*aria-label="LinkedIn"/);
+  assert.match(page, /href="tel:02873002222" aria-label="028 7300 2222"/);
+  assert.match(page, /\/assets\/icons\/facebook-f\.svg/);
+  assert.match(page, /\/assets\/icons\/tiktok\.svg/);
+  assert.match(page, /\/assets\/icons\/linkedin-in\.svg/);
+  assert.doesNotMatch(page, /href="https:\/\/instagram\.com"|href="https:\/\/zalo\.me"|aria-label="Instagram"|aria-label="Zalo"/);
+  assert.doesNotMatch(page, /https:\/\/www\.tiktok\.com\/@nhacao|href="https:\/\/youtube\.com"[^>]*aria-label="YouTube"/);
   assert.doesNotMatch(css, /src:\s*local\(/);
   assert.match(page, /desktopVisibleCards = 3/);
   assert.match(page, /Array\.from\(\{ length: desktopMaxStart \+ 1 \}/);
@@ -76,6 +86,9 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(page, /window\.setTimeout[\s\S]*4500/);
   assert.match(page, /prefers-reduced-motion:\s*reduce/);
   assert.match(page, /onMouseEnter=\{\(\) => setAutoPaused\(true\)\}/);
+  assert.match(page, /card\.image === "\/assets\/card-tour\.png" \? "journey-card journey-card-tour" : "journey-card"/);
+  assert.match(css, /@media \(min-width:\s*768px\)[\s\S]*?\.journey-card-tour \.journey-photo\s*\{[^}]*left:\s*-36px;[^}]*top:\s*-110px;[^}]*width:\s*442px;[^}]*height:\s*442px;/s);
+  assert.match(css, /@media \(min-width:\s*768px\)[\s\S]*?\.journey-card-tour \.journey-overlay\s*\{[^}]*45%[^}]*\.48\) 60%[^}]*#fff 78%/s);
   assert.match(css, /@media \(min-width:\s*1440px\)[\s\S]*?\.page-shell\s*\{[^}]*width:\s*100%;[^}]*height:\s*350\.5555556vw;[^}]*overflow:\s*clip;[^}]*\}[\s\S]*?\.desktop-canvas\s*\{[^}]*margin:\s*0;[^}]*transform:\s*scale\(calc\(100vw \/ 1440px\)\);[^}]*transform-origin:\s*top left;/s);
 
   for (const font of [
@@ -84,6 +97,10 @@ test("keeps the audited Figma frame and original assets in place", async () => {
     "inter-latin.woff2",
   ]) {
     await access(new URL(`../public/assets/${font}`, import.meta.url));
+  }
+
+  for (const icon of ["facebook-f.svg", "tiktok.svg", "linkedin-in.svg"]) {
+    await access(new URL(`../public/assets/icons/${icon}`, import.meta.url));
   }
 
   for (const asset of [
@@ -116,19 +133,74 @@ test("adapts the same page tree to the mobile handoff", async () => {
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.decorative-background\s*\{[^}]*top:\s*661px;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.background-buildings\s*\{[^}]*left:\s*0;[^}]*top:\s*394px;[^}]*width:\s*100%;[^}]*height:\s*auto;[^}]*aspect-ratio:\s*390 \/ 179;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.background-pattern\s*\{[^}]*top:\s*0;[^}]*height:\s*198px;[^}]*\}[\s\S]*?\.background-pattern img\s*\{[^}]*left:\s*-5\.61px;[^}]*top:\s*-121\.67px;/s);
-  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*top:\s*-9px;[^}]*height:\s*354px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*top:\s*-9px;[^}]*height:\s*378px;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about-title\s*\{[^}]*left:\s*20px;[^}]*top:\s*20px;[^}]*aspect-ratio:\s*302 \/ 119;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar\s*\{[^}]*grid-template-columns:\s*minmax\(0,74px\) 0 minmax\(0,74px\) 0 minmax\(0,74px\);[^}]*justify-content:\s*space-between;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar \.stat-cyan strong\s*\{[^}]*color:\s*#ff5a01;/s);
-  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.mobile-about-ellipse\s*\{[^}]*left:\s*50%;[^}]*top:\s*239px;[^}]*width:\s*700px;[^}]*height:\s*151px;/s);
-  assert.match(css, /@media \(max-width:\s*379px\)[\s\S]*?\.about\s*\{[^}]*height:\s*385px;[^}]*\}[\s\S]*?\.trust-bar\s*\{[^}]*top:\s*270px;/s);
+  assert.match(css, /\.stat-cyan strong\s*\{[^}]*color:\s*#ff5a01;/s);
+  assert.match(page, /Bệ phóng công nghệ hàng đầu<br \/>[\s\S]*?Môi trường thực chiến lý tưởng dành cho Gen Z/);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about\s*\{[^}]*background:\s*linear-gradient\(180deg,#fff 0%,#fff 30%,#fafeff 45%,#e7f9ff 60%,#aceaff 80%,#6dd5f8 100%\);/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar\s*\{[^}]*border-radius:\s*8px;[^}]*background:\s*#fff;[^}]*box-shadow:\s*0 2px 8px rgba\(5,13,29,\.22\);/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.mobile-about-ellipse\s*\{[^}]*display:\s*none;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.trust-bar\s*\{[^}]*top:\s*247px;/s);
+  assert.match(css, /@media \(max-width:\s*379px\)[\s\S]*?\.about\s*\{[^}]*height:\s*409px;[^}]*\}[\s\S]*?\.trust-bar\s*\{[^}]*top:\s*278px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.about > p\s*\{[^}]*left:\s*10px;[^}]*top:\s*170px;[^}]*width:\s*calc\(100% - 20px\);[^}]*font-size:\s*clamp\(10px,3\.333vw,13px\);/s);
+  assert.match(css, /@media \(max-width:\s*379px\)[\s\S]*?\.about > p\s*\{[^}]*top:\s*158px;/s);
   assert.match(css, /@media \(max-width:\s*359px\)[\s\S]*?\.trust-bar\s*\{[^}]*left:\s*8px;[^}]*width:\s*calc\(100% - 16px\);/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.connect\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;[^}]*height:\s*auto;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.footer-container\s*\{[^}]*top:\s*0;[^}]*width:\s*100%;/s);
   assert.doesNotMatch(page, /function MobilePage|<MobilePage/);
   assert.equal((page.match(/className="desktop-canvas"/g) ?? []).length, 1);
   assert.match(page, /Vuốt để khám phá thêm/);
+  assert.match(page, /className="pill-button pill-blue"[\s\S]*?href="https:\/\/fptjobs\.com\/"[\s\S]*?target="_blank"[\s\S]*?rel="noopener noreferrer"[\s\S]*?<span>Xem tất cả việc làm<\/span>/);
   assert.match(page, /const jobCategories: JobCategory\[\] = \[/);
+  for (const title of [
+    "Developer",
+    "Data",
+    "AI",
+    "IC Design",
+    "Embedded",
+    "Truyền thông",
+    "Nhân sự",
+    "Thiết kế",
+    "Kỹ thuật viên",
+    "Nhân viên Kinh doanh",
+    "Dịch vụ khách hàng",
+  ]) {
+    assert.match(page, new RegExp(`title: "${title}"`));
+  }
+  assert.match(page, /Hỗ trợ xử lý logic nghiệp vụ, làm việc với giao diện, hệ thống backend hoặc cơ sở dữ liệu tùy theo dự án\./);
+  assert.match(page, /Ứng dụng AI\/LLM để hỗ trợ xử lý dữ liệu và tối ưu báo cáo\./);
+  assert.match(page, /Phối hợp bring-up, kiểm tra và xử lý lỗi trên board mạch hoặc phần cứng thật\./);
+  assert.match(page, /Thực hiện các nhiệm vụ khác theo phân công của trưởng bộ phận\./);
+  assert.match(page, /Xác minh thực tế tại địa chỉ khách hàng khi có yêu cầu\./);
+  assert.match(page, /job\.details\.map\(\(detail, i\) => <li key=\{i\}>\{detail\}<\/li>\)/);
+  assert.doesNotMatch(page, /title: "Tài chính - Kế toán"|title: "Chuyên viên Kinh doanh"|title: "Chăm sóc Khách hàng"|title: "Kỹ thuật Viên Onsite"/);
+  assert.doesNotMatch(page, /Yêu cầu ứng viên|requirements:/);
+  for (const label of [
+    "Họ và tên",
+    "Số điện thoại",
+    "Email",
+    "Trường đại học/ cao đẳng",
+    "Thời gian dự kiến tốt nghiệp",
+    "Khu vực mong muốn làm việc",
+    "Vị trí mong muốn ứng tuyển",
+  ]) {
+    assert.match(page, new RegExp(`<span>${label} \\*</span>`));
+  }
+  assert.match(page, /<span>Thời gian dự kiến tốt nghiệp \*<\/span>[\s\S]*?<input required type="month" \/>/);
+  const locationField = page.match(/<span>Khu vực mong muốn làm việc \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
+  const positionField = page.match(/<span>Vị trí mong muốn ứng tuyển \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
+  assert.equal((locationField.match(/<option/g) ?? []).length, 35);
+  assert.equal((positionField.match(/<option/g) ?? []).length, 13);
+  for (const location of ["TP. Hồ Chí Minh", "TP. Cần Thơ", "TP. Đà Nẵng", "TP. Hải Phòng", "TP. Huế", "Vĩnh Long"]) {
+    assert.match(locationField, new RegExp(`>${location}<`));
+  }
+  for (const position of ["Developer", "Data", "AI", "IC Design", "Embedded", "Truyền thông", "Nhân sự", "Thiết kế", "Kỹ thuật viên", "Nhân viên Kinh doanh", "Dịch vụ khách hàng", "Khác"]) {
+    assert.match(positionField, new RegExp(`>${position}<`));
+  }
+  assert.match(page, /<span>Upload CV<\/span>/);
+  assert.doesNotMatch(page, /Upload CV \(không bắt buộc\)|<option value="Công nghệ - Bán dẫn">/);
   assert.match(page, /openCategory, setOpenCategory\] = useState\(jobCategories\[0\]\.id\)/);
   assert.match(page, /toggleSection\("students"\)[\s\S]*?Dành cho sinh viên/);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.company-header-card\s*\{[^}]*align-items:\s*flex-start;[^}]*text-align:\s*left;/s);
@@ -149,6 +221,8 @@ test("adapts the same page tree to the mobile handoff", async () => {
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey::after\s*\{[^}]*top:\s*58px;[^}]*cloud-2\.png[^}]*opacity:\s*\.14;/s);
   assert.match(css, /\.journey-cards\s*\{[^}]*--journey-card-width:\s*min\(310px,calc\(100vw - 48px\)\);[^}]*padding-inline:\s*calc\(\(100vw - var\(--journey-card-width\)\) \/ 2\);/s);
   assert.match(css, /\.journey-pattern\s*\{[^}]*top:\s*215px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey-card-tour \.journey-photo\s*\{[^}]*top:\s*-26px;[^}]*height:\s*336px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey-card-tour \.journey-overlay\s*\{[^}]*43%[^}]*\.44\) 60%[^}]*#fff 79%/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.journey-heading img\s*\{[^}]*left:\s*-68px;[^}]*top:\s*-17px;/s);
   assert.match(page, /className="mobile-journey-pagination"[\s\S]*?journeyCards\.map/);
   assert.match(page, /const firstCard = carousel\.querySelector<HTMLElement>\("\.journey-card"\);[\s\S]*?firstCard\?\.offsetWidth/);

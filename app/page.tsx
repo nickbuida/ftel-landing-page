@@ -6,9 +6,8 @@ import React, { useRef, useState, useEffect } from "react";
 type JobItem = {
   title: string;
   description: string;
-  location?: string;
-  type?: string;
-  requirements?: string[];
+  location: string;
+  details: string[];
 };
 
 type JobCategory = {
@@ -83,36 +82,56 @@ const technologyJobs: JobItem[] = [
     title: "Developer",
     description: "Tham gia phát triển và hoàn thiện các chức năng phần mềm theo phân công của đội ngũ.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time / Internship",
-    requirements: ["Nắm vững kiến thức căn bản về JavaScript/TypeScript, React hoặc Node.js", "Có tư duy logic tốt, chủ động trong công việc", "Ưu tiên sinh viên năm cuối hoặc mới tốt nghiệp khối ngành CNTT"],
+    details: [
+      "Tham gia phát triển và hoàn thiện các chức năng phần mềm theo phân công của đội ngũ.",
+      "Hỗ trợ xử lý logic nghiệp vụ, làm việc với giao diện, hệ thống backend hoặc cơ sở dữ liệu tùy theo dự án.",
+      "Kiểm thử, phát hiện lỗi, sửa lỗi và tối ưu chất lượng sản phẩm.",
+      "Làm quen với quy trình phát triển phần mềm, công cụ làm việc nhóm và công nghệ thực tế trong dự án.",
+    ],
   },
   {
     title: "Data",
     description: "Xử lý, phân tích dữ liệu và xây dựng report/dashboard theo dõi KPI.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Sử dụng thành thạo SQL, Python (Pandas, NumPy)", "Có kinh nghiệm làm việc với PowerBI / Tableau là một lợi thế", "Khả năng phân tích chỉ số kinh doanh tốt"],
+    details: [
+      "Xử lý, phân tích dữ liệu và xây dựng report/dashboard theo dõi KPI.",
+      "Hỗ trợ xây dựng pipeline, ETL/ELT và làm việc với dữ liệu lớn.",
+      "Kiểm tra chất lượng dữ liệu, phát hiện bất thường và đề xuất insight.",
+      "Ứng dụng AI/LLM để hỗ trợ xử lý dữ liệu và tối ưu báo cáo.",
+    ],
   },
   {
     title: "AI",
     description: "Tham gia nghiên cứu, xây dựng và tối ưu các mô hình, tính năng AI theo nhu cầu dự án.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time / Research",
-    requirements: ["Kiến thức chắc về Machine Learning / Deep Learning", "Sử dụng tốt PyTorch hoặc TensorFlow", "Có tinh thần nghiên cứu và áp dụng công nghệ mới"],
+    details: [
+      "Tham gia nghiên cứu, xây dựng và tối ưu các mô hình, tính năng AI theo nhu cầu dự án.",
+      "Hỗ trợ xử lý dữ liệu, huấn luyện, đánh giá và cải thiện hiệu quả mô hình.",
+      "Phối hợp cùng các đội ngũ liên quan để tích hợp giải pháp AI vào sản phẩm thực tế.",
+      "Tìm hiểu và thử nghiệm các công nghệ AI mới để đề xuất hướng ứng dụng phù hợp.",
+    ],
   },
   {
     title: "IC Design",
     description: "Tham gia thiết kế và phát triển các khối IP/phần cứng số theo yêu cầu dự án.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Hiểu biết về ngôn ngữ Verilog/SystemVerilog", "Kiến thức căn bản về thiết kế vi mạch số và FPGA", "Đam mê theo đuổi ngành bán dẫn số"],
+    details: [
+      "Tham gia thiết kế và phát triển các khối IP/phần cứng số theo yêu cầu dự án.",
+      "Hỗ trợ viết, kiểm tra và hoàn thiện mã mô tả phần cứng.",
+      "Tham gia kiểm tra chất lượng thiết kế, phát hiện lỗi và đề xuất điều chỉnh.",
+      "Làm quen với quy trình thiết kế vi mạch từ mô tả logic đến các bước triển khai tiếp theo.",
+    ],
   },
   {
     title: "Embedded",
     description: "Tham gia phát triển firmware/phần mềm nhúng cho chip, vi điều khiển hoặc thiết bị phần cứng.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Lập trình thành thạo C/C++ cho hệ thống nhúng", "Hiểu biết về RTOS, giao tiếp SPI, I2C, UART", "Có kinh nghiệm triển khai trên phần cứng thực tế"],
+    details: [
+      "Tham gia phát triển firmware/phần mềm nhúng cho chip, vi điều khiển hoặc thiết bị phần cứng.",
+      "Hỗ trợ lập trình, cấu hình và kiểm thử các chức năng giao tiếp, bộ nhớ và ngoại vi.",
+      "Phối hợp bring-up, kiểm tra và xử lý lỗi trên board mạch hoặc phần cứng thật.",
+      "Tìm hiểu RTOS, Embedded Linux và quy trình phát triển hệ thống nhúng trong dự án thực tế.",
+    ],
   },
 ];
 
@@ -121,53 +140,72 @@ const officeJobs: JobItem[] = [
     title: "Truyền thông",
     description: "Tham gia xây dựng và triển khai nội dung trên các kênh truyền thông của công ty.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time / Internship",
-    requirements: ["Khả năng viết lách tốt, sáng tạo nội dung mạng xã hội", "Kỹ năng quản lý fanpage, làm việc nhóm tốt", "Ưu tiên ngành Truyền thông, Báo chí, Marketing"],
+    details: [
+      "Tham gia xây dựng và triển khai nội dung trên các kênh truyền thông của công ty.",
+      "Hỗ trợ viết bài, biên tập nội dung, chụp ảnh/quay dựng cơ bản cho các hoạt động và chiến dịch truyền thông.",
+      "Phối hợp với các đơn vị liên quan để thu thập thông tin, phát triển ý tưởng và sản xuất nội dung.",
+      "Theo dõi hiệu quả nội dung, cập nhật xu hướng và đề xuất cách làm truyền thông phù hợp.",
+    ],
   },
   {
     title: "Nhân sự",
     description: "Tham gia hỗ trợ các nghiệp vụ nhân sự như tuyển dụng, đào tạo, chính sách, phúc lợi hoặc quan hệ lao động.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Yêu thích công việc làm việc với con người", "Kỹ năng giao tiếp và sắp xếp công việc chỉn chu", "Ưu tiên tốt nghiệp Quản trị Nhân sự, Luật, Kinh tế"],
+    details: [
+      "Tham gia hỗ trợ các nghiệp vụ nhân sự như tuyển dụng, đào tạo, chính sách, phúc lợi hoặc quan hệ lao động.",
+      "Phối hợp triển khai các hoạt động thu hút, phát triển và gắn kết nhân sự theo kế hoạch của đơn vị.",
+      "Hỗ trợ tổng hợp dữ liệu, chuẩn bị báo cáo và cập nhật thông tin nhân sự trên các hệ thống liên quan.",
+      "Tham gia xây dựng, cải tiến quy trình và trải nghiệm nhân viên trong quá trình làm việc tại FPT Telecom.",
+    ],
   },
   {
     title: "Thiết kế",
     description: "Tham gia thiết kế các ấn phẩm truyền thông, hình ảnh thương hiệu và tài liệu phục vụ hoạt động của FPT Telecom.",
     location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Sử dụng thành thạo Photoshop, Illustrator, Figma", "Tư duy thẩm mỹ hiện đại, cập nhật xu hướng UI/UX", "Có portfolio sản phẩm ấn tượng"],
-  },
-  {
-    title: "Tài chính - Kế toán",
-    description: "Tham gia xử lý chứng từ, kiểm soát chi phí và hỗ trợ công tác lập báo cáo tài chính.",
-    location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Cẩn thận, trung thực, nắm chắc nguyên lý kế toán", "Thành thạo Excel và các công cụ văn phòng"],
+    details: [
+      "Tham gia thiết kế các ấn phẩm truyền thông, hình ảnh thương hiệu và tài liệu phục vụ hoạt động của FPT Telecom.",
+      "Hỗ trợ phát triển ý tưởng hình ảnh, bố cục, màu sắc và phong cách thiết kế theo từng chiến dịch.",
+      "Phối hợp với các bộ phận liên quan để chỉnh sửa, hoàn thiện sản phẩm thiết kế đúng mục tiêu và tiến độ.",
+      "Cập nhật xu hướng thiết kế, đề xuất ý tưởng sáng tạo nhằm nâng cao chất lượng hình ảnh truyền thông.",
+    ],
   },
 ];
 
 const businessJobs: JobItem[] = [
   {
-    title: "Chuyên viên Kinh doanh",
-    description: "Tìm kiếm, tư vấn và phát triển hệ thống khách hàng cho các sản phẩm dịch vụ viễn thông.",
+    title: "Kỹ thuật viên",
+    description: "Triển khai và bảo trì đường truyền Internet, Truyền hình FPT Play và Camera tại nhà khách hàng.",
     location: "Toàn quốc",
-    type: "Full-time",
-    requirements: ["Năng động, giao tiếp linh hoạt, thích thử thách chỉ tiêu", "Có phương tiện đi lại chủ động", "Ưu tiên ứng viên có đam mê kinh doanh"],
+    details: [
+      "Triển khai và bảo trì đường truyền Internet, Truyền hình FPT Play và Camera tại nhà khách hàng.",
+      "Hỗ trợ xử lý sự cố kỹ thuật và bảo đảm chất lượng dịch vụ tại từng điểm chạm.",
+      "Kiểm tra, sửa chữa hệ thống viễn thông và thu hồi thiết bị khi khách hàng ngừng sử dụng dịch vụ.",
+      "Hỗ trợ thu cước, tư vấn phương thức thanh toán và chăm sóc khách hàng trên địa bàn phụ trách.",
+      "Thực hiện các nhiệm vụ khác theo phân công của trưởng bộ phận.",
+    ],
   },
   {
-    title: "Chăm sóc Khách hàng",
-    description: "Tiếp nhận, xử lý giải đáp thắc mắc và hỗ trợ khách hàng qua các kênh dịch vụ chính thức.",
-    location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time / Ca linh hoạt",
-    requirements: ["Giọng nói rõ ràng, kiên nhẫn, lắng nghe tốt", "Kỹ năng gõ máy tính và xử lý thông tin nhanh"],
+    title: "Nhân viên Kinh doanh",
+    description: "Tìm kiếm, tiếp cận và xây dựng mối quan hệ với khách hàng tiềm năng.",
+    location: "Toàn quốc",
+    details: [
+      "Tìm kiếm, tiếp cận và xây dựng mối quan hệ với khách hàng tiềm năng.",
+      "Tư vấn các dịch vụ Internet, Truyền hình FPT Play và Camera phù hợp với nhu cầu khách hàng.",
+      "Tạo trải nghiệm cá nhân hóa tại các điểm tiếp xúc online và offline.",
+      "Đàm phán, thương lượng và thực hiện thủ tục ký kết hợp đồng với khách hàng.",
+    ],
   },
   {
-    title: "Kỹ thuật Viên Onsite",
-    description: "Triển khai lắp đặt, bảo trì hạ tầng viễn thông và thiết bị cho khách hàng.",
+    title: "Dịch vụ khách hàng",
+    description: "Quản lý dòng tiền, theo dõi thanh toán và phối hợp cùng đội nhóm để đạt chỉ tiêu thu hồi công nợ.",
     location: "Toàn quốc",
-    type: "Full-time",
-    requirements: ["Tốt nghiệp ngành Điện, Điện tử, Viễn thông, CNTT", "Sức khỏe tốt, ham học hỏi"],
+    details: [
+      "Quản lý dòng tiền, theo dõi thanh toán và phối hợp cùng đội nhóm để đạt chỉ tiêu thu hồi công nợ.",
+      "Tiếp nhận, giải đáp thắc mắc hoặc khiếu nại của khách hàng liên quan đến cước dịch vụ.",
+      "Chủ động chăm sóc, tư vấn gói dịch vụ, dịch vụ cộng thêm và chương trình ưu đãi phù hợp.",
+      "Kiểm tra hợp đồng, cập nhật chính xác thông tin khách hàng và xử lý các thủ tục chuyển đổi, đổi chủ hoặc thanh lý.",
+      "Xác minh thực tế tại địa chỉ khách hàng khi có yêu cầu.",
+    ],
   },
 ];
 
@@ -186,7 +224,7 @@ function PillButton({ children, blue = false, type = "button", onClick }: { chil
   );
 }
 
-// Custom SVG Icons
+// Interface and brand icons
 function IconLocation() {
   return (
     <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -197,28 +235,25 @@ function IconLocation() {
 
 function IconFacebook() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="24" height="24" rx="6" fill="#1877F2"/>
-      <path d="M16 12.5H13.5V21H10V12.5H8.5V9.5H10V7.75C10 6.1 11.1 4.75 13.25 4.75H15.75V7.75H14.25C13.6 7.75 13.5 8 13.5 8.5V9.5H16L16 12.5Z" fill="white"/>
-    </svg>
+    <span className="brand-icon brand-icon-facebook" aria-hidden="true">
+      <img src="/assets/icons/facebook-f.svg" alt="" />
+    </span>
   );
 }
 
 function IconTikTok() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="24" height="24" rx="6" fill="#010101"/>
-      <path d="M16.5 8.2C15.4 8.2 14.4 7.7 13.7 6.9V14.5C13.7 17.5 11.2 20 8.2 20C5.2 20 2.7 17.5 2.7 14.5C2.7 11.5 5.2 9 8.2 9C8.6 9 9 9.05 9.4 9.15V11.8C9 11.65 8.6 11.6 8.2 11.6C6.6 11.6 5.3 12.9 5.3 14.5C5.3 16.1 6.6 17.4 8.2 17.4C9.8 17.4 11.1 16.1 11.1 14.5V4H13.7C13.7 5.3 14.7 6.3 16 6.5V8.2H16.5Z" fill="white"/>
-    </svg>
+    <span className="brand-icon brand-icon-tiktok" aria-hidden="true">
+      <img src="/assets/icons/tiktok.svg" alt="" />
+    </span>
   );
 }
 
 function IconLinkedIn() {
   return (
-    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect width="24" height="24" rx="6" fill="#0A66C2"/>
-      <path d="M7 9H4.5V19.5H7V9ZM5.75 4.5C4.9 4.5 4.25 5.15 4.25 6C4.25 6.85 4.9 7.5 5.75 7.5C6.6 7.5 7.25 6.85 7.25 6C7.25 5.15 6.6 4.5 5.75 4.5ZM19.5 19.5H17V14C17 12.2 15.5 12 15 12.8V19.5H12.5V9H15V10.4C15.6 9.4 17 9 18.2 9C19.8 9 20.5 10.2 20.5 12.5V19.5H19.5Z" fill="white"/>
-    </svg>
+    <span className="brand-icon brand-icon-linkedin" aria-hidden="true">
+      <img src="/assets/icons/linkedin-in.svg" alt="" />
+    </span>
   );
 }
 
@@ -388,7 +423,8 @@ function About() {
       </div>
 
       <p>
-        Bệ phóng công nghệ hàng đầu, nơi Gen Z được học hỏi từ những dự án thực tế, phát triển năng lực mỗi ngày và bứt phá sự nghiệp trong môi trường đổi mới, sáng tạo
+        Bệ phóng công nghệ hàng đầu<br />
+        Môi trường thực chiến lý tưởng dành cho Gen Z
       </p>
 
       <img className="mobile-about-ellipse" src="/assets/mobile/decorative-ellipse.svg" alt="" />
@@ -598,7 +634,7 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
       >
         {journeyCards.map((card, idx) => (
           <article
-            className="journey-card"
+            className={card.image === "/assets/card-tour.png" ? "journey-card journey-card-tour" : "journey-card"}
             key={idx}
             onClick={() => onSelectCard(card)}
             style={{ cursor: "pointer" }}
@@ -782,9 +818,14 @@ function Jobs({ onSelectJob }: { onSelectJob: (job: JobItem) => void }) {
         })}
       </div>
 
-      <PillButton blue onClick={() => onSelectJob(technologyJobs[0])}>
-        Xem tất cả việc làm
-      </PillButton>
+      <a
+        className="pill-button pill-blue"
+        href="https://fptjobs.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>Xem tất cả việc làm</span>
+      </a>
     </section>
   );
 }
@@ -827,64 +868,96 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
 
       <form className="connect-form" id="connect-form" onSubmit={handleSubmit}>
         <label className="form-field">
-          <span>Họ và tên</span>
+          <span>Họ và tên *</span>
           <input required placeholder="Nguyễn Văn A" />
         </label>
 
         <label className="form-field">
-          <span>Số điện thoại</span>
+          <span>Số điện thoại *</span>
           <input required type="tel" placeholder="0987654321" />
         </label>
 
         <label className="form-field">
-          <span>Email</span>
+          <span>Email *</span>
           <input required type="email" placeholder="example@gmail.com" />
         </label>
 
         <label className="form-field">
-          <span>Trường đại học/ cao đẳng</span>
+          <span>Trường đại học/ cao đẳng *</span>
           <input required placeholder="Đại học FPT, Bách Khoa..." />
         </label>
 
         <label className="form-field">
-          <span>Thời gian dự kiến tốt nghiệp</span>
-          <select defaultValue="" required>
-            <option value="" disabled>
-              Lựa chọn...
-            </option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
-          </select>
+          <span>Thời gian dự kiến tốt nghiệp *</span>
+          <input required type="month" />
         </label>
 
         <label className="form-field">
-          <span>Khu vực mong muốn làm việc</span>
+          <span>Khu vực mong muốn làm việc *</span>
           <select defaultValue="" required>
             <option value="" disabled>
               Lựa chọn...
             </option>
             <option value="Hà Nội">Hà Nội</option>
-            <option value="Hồ Chí Minh">Hồ Chí Minh</option>            <option value="Đà Nẵng">Đà Nẵng</option>
-            <option value="Khác">Tỉnh thành khác</option>
+            <option value="TP. Hồ Chí Minh">TP. Hồ Chí Minh</option>
+            <option value="An Giang">An Giang</option>
+            <option value="Bắc Ninh">Bắc Ninh</option>
+            <option value="Cà Mau">Cà Mau</option>
+            <option value="Cao Bằng">Cao Bằng</option>
+            <option value="TP. Cần Thơ">TP. Cần Thơ</option>
+            <option value="TP. Đà Nẵng">TP. Đà Nẵng</option>
+            <option value="Đắk Lắk">Đắk Lắk</option>
+            <option value="Điện Biên">Điện Biên</option>
+            <option value="Đồng Nai">Đồng Nai</option>
+            <option value="Đồng Tháp">Đồng Tháp</option>
+            <option value="Gia Lai">Gia Lai</option>
+            <option value="Hà Tĩnh">Hà Tĩnh</option>
+            <option value="TP. Hải Phòng">TP. Hải Phòng</option>
+            <option value="TP. Huế">TP. Huế</option>
+            <option value="Hưng Yên">Hưng Yên</option>
+            <option value="Khánh Hòa">Khánh Hòa</option>
+            <option value="Lai Châu">Lai Châu</option>
+            <option value="Lâm Đồng">Lâm Đồng</option>
+            <option value="Lạng Sơn">Lạng Sơn</option>
+            <option value="Lào Cai">Lào Cai</option>
+            <option value="Nghệ An">Nghệ An</option>
+            <option value="Ninh Bình">Ninh Bình</option>
+            <option value="Phú Thọ">Phú Thọ</option>
+            <option value="Quảng Ngãi">Quảng Ngãi</option>
+            <option value="Quảng Ninh">Quảng Ninh</option>
+            <option value="Quảng Trị">Quảng Trị</option>
+            <option value="Sơn La">Sơn La</option>
+            <option value="Tây Ninh">Tây Ninh</option>
+            <option value="Thái Nguyên">Thái Nguyên</option>
+            <option value="Thanh Hóa">Thanh Hóa</option>
+            <option value="Tuyên Quang">Tuyên Quang</option>
+            <option value="Vĩnh Long">Vĩnh Long</option>
           </select>
         </label>
 
         <label className="form-field">
-          <span>Vị trí mong muốn ứng tuyển</span>
+          <span>Vị trí mong muốn ứng tuyển *</span>
           <select defaultValue="" required>
             <option value="" disabled>
               Lựa chọn...
             </option>
-            <option value="Công nghệ - Bán dẫn">Công nghệ - Bán dẫn</option>
-            <option value="Kinh doanh - Dịch vụ - Kỹ thuật">Kinh doanh - Dịch vụ - Kỹ thuật</option>
-            <option value="Văn phòng">Văn phòng</option>
+            <option value="Developer">Developer</option>
+            <option value="Data">Data</option>
+            <option value="AI">AI</option>
+            <option value="IC Design">IC Design</option>
+            <option value="Embedded">Embedded</option>
+            <option value="Truyền thông">Truyền thông</option>
+            <option value="Nhân sự">Nhân sự</option>
+            <option value="Thiết kế">Thiết kế</option>
+            <option value="Kỹ thuật viên">Kỹ thuật viên</option>
+            <option value="Nhân viên Kinh doanh">Nhân viên Kinh doanh</option>
+            <option value="Dịch vụ khách hàng">Dịch vụ khách hàng</option>
+            <option value="Khác">Khác</option>
           </select>
         </label>
 
         <label className="form-field upload-field">
-          <span>Upload CV (không bắt buộc)</span>
+          <span>Upload CV</span>
           <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} aria-label="Upload CV" />
           <b>{fileName ? `✓ ${fileName}` : "Upload"}</b>
         </label>
@@ -943,7 +1016,7 @@ function Footer() {
               </div>
             </a>
 
-            <a href="https://www.tiktok.com/@nhacao" target="_blank" rel="noopener noreferrer" className="contact-item">
+            <a href="https://www.tiktok.com/@tuyendungfpttelecom" target="_blank" rel="noopener noreferrer" className="contact-item">
               <span className="contact-icon"><IconTikTok /></span>
               <div className="contact-info">
                 <strong>Nhà Cáo</strong>
@@ -1116,10 +1189,10 @@ function Footer() {
           <div className="meta-left">
             <span>Theo dõi các kênh chính thức<br className="mobile-meta-break" /> của FPT Telecom</span>
             <div className="social-icons">
-              <a href="https://facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook /></a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><IconTikTok /></a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconLinkedIn /></a>
-              <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" aria-label="Zalo"><IconPhone /></a>
+              <a href="https://www.facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook /></a>
+              <a href="https://www.tiktok.com/@tuyendungfpttelecom" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><IconTikTok /></a>
+              <a href="https://www.linkedin.com/company/fpt-telecom" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><IconLinkedIn /></a>
+              <a href="tel:02873002222" aria-label="028 7300 2222"><IconPhone /></a>
             </div>
           </div>
 
@@ -1149,24 +1222,13 @@ function JobModal({ job, onClose }: { job: JobItem | null; onClose: () => void }
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close" onClick={onClose}>✕</button>
-        <span className="modal-badge">{job.type || "Full-time"}</span>
         <h2>{job.title}</h2>
         <p className="modal-location"><IconLocation /> {job.location || "Hà Nội - Hồ Chí Minh"}</p>
         <hr className="modal-divider" />
 
         <h3>Mô tả công việc</h3>
-        <p>{job.description}</p>
-
-        <h3>Yêu cầu ứng viên</h3>
         <ul>
-          {job.requirements ? (
-            job.requirements.map((req, i) => <li key={i}>{req}</li>)
-          ) : (
-            <>
-              <li>Tốt nghiệp ĐH/CĐ chuyên ngành liên quan</li>
-              <li>Chủ động, ham học hỏi và có tư duy logic tốt</li>
-            </>
-          )}
+          {job.details.map((detail, i) => <li key={i}>{detail}</li>)}
         </ul>
 
         <div className="modal-actions">
