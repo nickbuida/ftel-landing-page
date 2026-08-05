@@ -8,7 +8,7 @@ type JobItem = {
   description: string;
   location?: string;
   type?: string;
-  requirements?: string[];
+  details?: string[];
 };
 
 type JobCategory = {
@@ -84,35 +84,55 @@ const technologyJobs: JobItem[] = [
     description: "Tham gia phát triển và hoàn thiện các chức năng phần mềm theo phân công của đội ngũ.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time / Internship",
-    requirements: ["Nắm vững kiến thức căn bản về JavaScript/TypeScript, React hoặc Node.js", "Có tư duy logic tốt, chủ động trong công việc", "Ưu tiên sinh viên năm cuối hoặc mới tốt nghiệp khối ngành CNTT"],
+    details: [
+      "Hỗ trợ xử lý logic nghiệp vụ, làm việc với giao diện, hệ thống backend hoặc cơ sở dữ liệu tùy theo dự án.",
+      "Kiểm thử, phát hiện lỗi, sửa lỗi và tối ưu chất lượng sản phẩm.",
+      "Làm quen với quy trình phát triển phần mềm, công cụ làm việc nhóm và công nghệ thực tế trong dự án.",
+    ],
   },
   {
     title: "Data",
     description: "Xử lý, phân tích dữ liệu và xây dựng report/dashboard theo dõi KPI.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time",
-    requirements: ["Sử dụng thành thạo SQL, Python (Pandas, NumPy)", "Có kinh nghiệm làm việc với PowerBI / Tableau là một lợi thế", "Khả năng phân tích chỉ số kinh doanh tốt"],
+    details: [
+      "Hỗ trợ xây dựng pipeline, ETL/ELT và làm việc với dữ liệu lớn.",
+      "Kiểm tra chất lượng dữ liệu, phát hiện bất thường và đề xuất insight.",
+      "Ứng dụng AI/LLM để hỗ trợ xử lý dữ liệu và tối ưu báo cáo.",
+    ],
   },
   {
     title: "AI",
     description: "Tham gia nghiên cứu, xây dựng và tối ưu các mô hình, tính năng AI theo nhu cầu dự án.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time / Research",
-    requirements: ["Kiến thức chắc về Machine Learning / Deep Learning", "Sử dụng tốt PyTorch hoặc TensorFlow", "Có tinh thần nghiên cứu và áp dụng công nghệ mới"],
+    details: [
+      "Hỗ trợ xử lý dữ liệu, huấn luyện, đánh giá và cải thiện hiệu quả mô hình.",
+      "Phối hợp cùng các đội ngũ liên quan để tích hợp giải pháp AI vào sản phẩm thực tế.",
+      "Tìm hiểu và thử nghiệm các công nghệ AI mới để đề xuất hướng ứng dụng phù hợp.",
+    ],
   },
   {
     title: "IC Design",
     description: "Tham gia thiết kế và phát triển các khối IP/phần cứng số theo yêu cầu dự án.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time",
-    requirements: ["Hiểu biết về ngôn ngữ Verilog/SystemVerilog", "Kiến thức căn bản về thiết kế vi mạch số và FPGA", "Đam mê theo đuổi ngành bán dẫn số"],
+    details: [
+      "Hỗ trợ viết, kiểm tra và hoàn thiện mã mô tả phần cứng.",
+      "Tham gia kiểm tra chất lượng thiết kế, phát hiện lỗi và đề xuất điều chỉnh.",
+      "Làm quen với quy trình thiết kế vi mạch từ mô tả logic đến các bước triển khai tiếp theo.",
+    ],
   },
   {
     title: "Embedded",
     description: "Tham gia phát triển firmware/phần mềm nhúng cho chip, vi điều khiển hoặc thiết bị phần cứng.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time",
-    requirements: ["Lập trình thành thạo C/C++ cho hệ thống nhúng", "Hiểu biết về RTOS, giao tiếp SPI, I2C, UART", "Có kinh nghiệm triển khai trên phần cứng thực tế"],
+    details: [
+      "Hỗ trợ lập trình, cấu hình và kiểm thử các chức năng giao tiếp, bộ nhớ và ngoại vi.",
+      "Phối hợp bring-up, kiểm tra và xử lý lỗi trên board mạch hoặc phần cứng thật.",
+      "Tìm hiểu RTOS, Embedded Linux và quy trình phát triển hệ thống nhúng trong dự án thực tế.",
+    ],
   },
 ];
 
@@ -122,52 +142,71 @@ const officeJobs: JobItem[] = [
     description: "Tham gia xây dựng và triển khai nội dung trên các kênh truyền thông của công ty.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time / Internship",
-    requirements: ["Khả năng viết lách tốt, sáng tạo nội dung mạng xã hội", "Kỹ năng quản lý fanpage, làm việc nhóm tốt", "Ưu tiên ngành Truyền thông, Báo chí, Marketing"],
+    details: [
+      "Hỗ trợ viết bài, biên tập nội dung, chụp ảnh/quay dựng cơ bản cho các hoạt động và chiến dịch truyền thông.",
+      "Phối hợp với các đơn vị liên quan để thu thập thông tin, phát triển ý tưởng và sản xuất nội dung.",
+      "Theo dõi hiệu quả nội dung, cập nhật xu hướng và đề xuất cách làm truyền thông phù hợp.",
+    ],
   },
   {
     title: "Nhân sự",
     description: "Tham gia hỗ trợ các nghiệp vụ nhân sự như tuyển dụng, đào tạo, chính sách, phúc lợi hoặc quan hệ lao động.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time",
-    requirements: ["Yêu thích công việc làm việc với con người", "Kỹ năng giao tiếp và sắp xếp công việc chỉn chu", "Ưu tiên tốt nghiệp Quản trị Nhân sự, Luật, Kinh tế"],
+    details: [
+      "Phối hợp triển khai các hoạt động thu hút, phát triển và gắn kết nhân sự theo kế hoạch của đơn vị.",
+      "Hỗ trợ tổng hợp dữ liệu, chuẩn bị báo cáo và cập nhật thông tin nhân sự trên các hệ thống liên quan.",
+      "Tham gia xây dựng, cải tiến quy trình và trải nghiệm nhân viên trong quá trình làm việc tại FPT Telecom.",
+    ],
   },
   {
     title: "Thiết kế",
     description: "Tham gia thiết kế các ấn phẩm truyền thông, hình ảnh thương hiệu và tài liệu phục vụ hoạt động của FPT Telecom.",
     location: "Hà Nội - Hồ Chí Minh",
     type: "Full-time",
-    requirements: ["Sử dụng thành thạo Photoshop, Illustrator, Figma", "Tư duy thẩm mỹ hiện đại, cập nhật xu hướng UI/UX", "Có portfolio sản phẩm ấn tượng"],
-  },
-  {
-    title: "Tài chính - Kế toán",
-    description: "Tham gia xử lý chứng từ, kiểm soát chi phí và hỗ trợ công tác lập báo cáo tài chính.",
-    location: "Hà Nội - Hồ Chí Minh",
-    type: "Full-time",
-    requirements: ["Cẩn thận, trung thực, nắm chắc nguyên lý kế toán", "Thành thạo Excel và các công cụ văn phòng"],
+    details: [
+      "Hỗ trợ phát triển ý tưởng hình ảnh, bố cục, màu sắc và phong cách thiết kế theo từng chiến dịch.",
+      "Phối hợp với các bộ phận liên quan để chỉnh sửa, hoàn thiện sản phẩm thiết kế đúng mục tiêu và tiến độ.",
+      "Cập nhật xu hướng thiết kế, đề xuất ý tưởng sáng tạo nhằm nâng cao chất lượng hình ảnh truyền thông.",
+    ],
   },
 ];
 
 const businessJobs: JobItem[] = [
   {
-    title: "Chuyên viên Kinh doanh",
-    description: "Tìm kiếm, tư vấn và phát triển hệ thống khách hàng cho các sản phẩm dịch vụ viễn thông.",
+    title: "Kỹ thuật viên",
+    description: "Triển khai và bảo trì đường truyền Internet, Truyền hình FPT Play và Camera tại nhà khách hàng.",
     location: "Toàn quốc",
     type: "Full-time",
-    requirements: ["Năng động, giao tiếp linh hoạt, thích thử thách chỉ tiêu", "Có phương tiện đi lại chủ động", "Ưu tiên ứng viên có đam mê kinh doanh"],
+    details: [
+      "Hỗ trợ xử lý sự cố kỹ thuật và bảo đảm chất lượng dịch vụ tại từng điểm chạm.",
+      "Kiểm tra, sửa chữa hệ thống viễn thông và thu hồi thiết bị khi khách hàng ngừng sử dụng dịch vụ.",
+      "Hỗ trợ thu cước, tư vấn phương thức thanh toán và chăm sóc khách hàng trên địa bàn phụ trách.",
+      "Thực hiện các nhiệm vụ khác theo phân công của trưởng bộ phận.",
+    ],
   },
   {
-    title: "Chăm sóc Khách hàng",
-    description: "Tiếp nhận, xử lý giải đáp thắc mắc và hỗ trợ khách hàng qua các kênh dịch vụ chính thức.",
-    location: "Hà Nội - Hồ Chí Minh",
+    title: "Nhân viên Kinh doanh",
+    description: "Tìm kiếm, tiếp cận và xây dựng mối quan hệ với khách hàng tiềm năng.",
+    location: "Toàn quốc",
+    type: "Full-time",
+    details: [
+      "Tư vấn các dịch vụ Internet, Truyền hình FPT Play và Camera phù hợp với nhu cầu khách hàng.",
+      "Tạo trải nghiệm cá nhân hóa tại các điểm tiếp xúc online và offline.",
+      "Đàm phán, thương lượng và thực hiện thủ tục ký kết hợp đồng với khách hàng.",
+    ],
+  },
+  {
+    title: "Dịch vụ khách hàng",
+    description: "Quản lý dòng tiền, theo dõi thanh toán và phối hợp cùng đội nhóm để đạt chỉ tiêu thu hồi công nợ.",
+    location: "Toàn quốc",
     type: "Full-time / Ca linh hoạt",
-    requirements: ["Giọng nói rõ ràng, kiên nhẫn, lắng nghe tốt", "Kỹ năng gõ máy tính và xử lý thông tin nhanh"],
-  },
-  {
-    title: "Kỹ thuật Viên Onsite",
-    description: "Triển khai lắp đặt, bảo trì hạ tầng viễn thông và thiết bị cho khách hàng.",
-    location: "Toàn quốc",
-    type: "Full-time",
-    requirements: ["Tốt nghiệp ngành Điện, Điện tử, Viễn thông, CNTT", "Sức khỏe tốt, ham học hỏi"],
+    details: [
+      "Tiếp nhận, giải đáp thắc mắc hoặc khiếu nại của khách hàng liên quan đến cước dịch vụ.",
+      "Chủ động chăm sóc, tư vấn gói dịch vụ, dịch vụ cộng thêm và chương trình ưu đãi phù hợp.",
+      "Kiểm tra hợp đồng, cập nhật chính xác thông tin khách hàng và xử lý các thủ tục chuyển đổi, đổi chủ hoặc thanh lý.",
+      "Xác minh thực tế tại địa chỉ khách hàng khi có yêu cầu.",
+    ],
   },
 ];
 
@@ -175,6 +214,58 @@ const jobCategories: JobCategory[] = [
   { id: "technology", label: "Công nghệ - Bán dẫn", items: technologyJobs },
   { id: "office", label: "Văn phòng", items: officeJobs },
   { id: "business", label: "Kinh doanh - Dịch vụ - Kỹ thuật", items: businessJobs },
+];
+
+const workLocations = [
+  "Hà Nội",
+  "TP. Hồ Chí Minh",
+  "An Giang",
+  "Bắc Ninh",
+  "Cà Mau",
+  "Cao Bằng",
+  "TP. Cần Thơ",
+  "TP. Đà Nẵng",
+  "Đắk Lắk",
+  "Điện Biên",
+  "Đồng Nai",
+  "Đồng Tháp",
+  "Gia Lai",
+  "Hà Tĩnh",
+  "TP. Hải Phòng",
+  "TP. Huế",
+  "Hưng Yên",
+  "Khánh Hòa",
+  "Lai Châu",
+  "Lâm Đồng",
+  "Lạng Sơn",
+  "Lào Cai",
+  "Nghệ An",
+  "Ninh Bình",
+  "Phú Thọ",
+  "Quảng Ngãi",
+  "Quảng Ninh",
+  "Quảng Trị",
+  "Sơn La",
+  "Tây Ninh",
+  "Thái Nguyên",
+  "Thanh Hóa",
+  "Tuyên Quang",
+  "Vĩnh Long",
+];
+
+const jobPreferenceOptions = [
+  "Developer",
+  "Data",
+  "AI",
+  "IC Design",
+  "Embedded",
+  "Truyền thông",
+  "Nhân sự",
+  "Thiết kế",
+  "Kỹ thuật viên",
+  "Nhân viên Kinh doanh",
+  "Dịch vụ khách hàng",
+  "Khác",
 ];
 
 // Helper UI Components
@@ -191,6 +282,68 @@ function IconLocation() {
   return (
     <svg width="14" height="18" viewBox="0 0 14 18" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M7 0C3.13 0 0 3.13 0 7C0 12.25 7 18 7 18C7 18 14 12.25 14 7C14 3.13 10.87 0 7 0ZM7 9.5C5.62 9.5 4.5 8.38 4.5 7C4.5 5.62 5.62 4.5 7 4.5C8.38 4.5 9.5 5.62 9.5 7C9.5 8.38 8.38 9.5 7 9.5Z" fill="#353B40" />
+    </svg>
+  );
+}
+
+function ContactLocationIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#46B9F8" />
+      <path d="M22 9.5C16.75 9.5 12.5 13.75 12.5 19c0 7.25 9.5 15.5 9.5 15.5s9.5-8.25 9.5-15.5c0-5.25-4.25-9.5-9.5-9.5Z" fill="white" />
+      <circle cx="22" cy="19" r="3.5" fill="#46B9F8" />
+    </svg>
+  );
+}
+
+function ContactFacebookIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#1877F2" />
+      <path d="M24.75 36V23.22h4.3l.65-5h-4.95V15c0-1.45.4-2.44 2.48-2.44H30V8.1c-.48-.06-2.1-.2-4.03-.2-4.03 0-6.79 2.46-6.79 6.98v3.34H14.6v5h4.58V36h5.57Z" fill="white" />
+    </svg>
+  );
+}
+
+function ContactTikTokIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#050505" />
+      <path d="M25.2 10.2c.45 3.15 2.15 5.05 5.6 5.7v4.35a12.3 12.3 0 0 1-5.6-1.75v9.05a7.7 7.7 0 1 1-6.35-7.57v4.45a3.45 3.45 0 1 0 1.95 3.12V10.2h4.4Z" fill="#25F4EE" transform="translate(-1 1)" />
+      <path d="M25.2 10.2c.45 3.15 2.15 5.05 5.6 5.7v4.35a12.3 12.3 0 0 1-5.6-1.75v9.05a7.7 7.7 0 1 1-6.35-7.57v4.45a3.45 3.45 0 1 0 1.95 3.12V10.2h4.4Z" fill="#FE2C55" transform="translate(1 -1)" />
+      <path d="M25.2 10.2c.45 3.15 2.15 5.05 5.6 5.7v4.35a12.3 12.3 0 0 1-5.6-1.75v9.05a7.7 7.7 0 1 1-6.35-7.57v4.45a3.45 3.45 0 1 0 1.95 3.12V10.2h4.4Z" fill="white" />
+    </svg>
+  );
+}
+
+function ContactLinkedInIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#0A66C2" />
+      <circle cx="13.5" cy="13.5" r="2.7" fill="white" />
+      <rect x="11" y="18" width="5" height="15" rx=".6" fill="white" />
+      <path d="M19 18h4.8v2.05c1.1-1.55 2.85-2.55 5.15-2.55 5.05 0 6.05 3.35 6.05 7.85V33h-5v-7.05c0-1.9-.05-4.3-2.7-4.3-2.7 0-3.15 2.1-3.15 4.15V33H19V18Z" fill="white" />
+    </svg>
+  );
+}
+
+function ContactPhoneIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#1597F4" />
+      <rect x="14.5" y="8.5" width="15" height="27" rx="3" fill="white" />
+      <rect x="17" y="12" width="10" height="17" rx="1" fill="#1597F4" />
+      <circle cx="22" cy="32" r="1.5" fill="#1597F4" />
+    </svg>
+  );
+}
+
+function ContactEmailIcon() {
+  return (
+    <svg className="contact-svg" viewBox="0 0 44 44" fill="none" aria-hidden="true">
+      <rect width="44" height="44" rx="10" fill="#39B5FF" />
+      <rect x="9.5" y="13" width="25" height="18" rx="2.5" fill="white" />
+      <path d="m11.5 15.5 10.5 8 10.5-8" stroke="#39B5FF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -388,7 +541,8 @@ function About() {
       </div>
 
       <p>
-        Bệ phóng công nghệ hàng đầu, nơi Gen Z được học hỏi từ những dự án thực tế, phát triển năng lực mỗi ngày và bứt phá sự nghiệp trong môi trường đổi mới, sáng tạo
+        Bệ phóng công nghệ hàng đầu<br />
+        Môi trường thực chiến lý tưởng dành cho Gen Z
       </p>
 
       <img className="mobile-about-ellipse" src="/assets/mobile/decorative-ellipse.svg" alt="" />
@@ -420,15 +574,52 @@ function Privileges() {
 
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
 
   const handleScroll = () => {
-    if (!trackRef.current) return;
-    const cardWidth = 326;
-    setActive(Math.max(0, Math.min(cards.length - 1, Math.round(trackRef.current.scrollLeft / cardWidth))));
+    const track = trackRef.current;
+    if (!track) return;
+    const firstCard = track.querySelector<HTMLElement>(".privilege-card");
+    const cardStep = (firstCard?.offsetWidth ?? 310) + 16;
+    setActive(Math.max(0, Math.min(cards.length - 1, Math.round(track.scrollLeft / cardStep))));
   };
 
+  useEffect(() => {
+    const track = trackRef.current;
+    if (
+      autoPaused ||
+      !track ||
+      track.clientWidth >= 600 ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      const firstCard = track.querySelector<HTMLElement>(".privilege-card");
+      const cardStep = (firstCard?.offsetWidth ?? 310) + 16;
+      const cardCount = track.querySelectorAll(".privilege-card").length;
+      const nextIndex = active >= cardCount - 1 ? 0 : active + 1;
+
+      setActive(nextIndex);
+      track.scrollTo({ left: nextIndex * cardStep, behavior: "smooth" });
+    }, 4500);
+
+    return () => window.clearTimeout(timer);
+  }, [active, autoPaused]);
+
   return (
-    <section className="privileges">
+    <section
+      className="privileges"
+      onMouseEnter={() => setAutoPaused(true)}
+      onMouseLeave={() => setAutoPaused(false)}
+      onFocusCapture={() => setAutoPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setAutoPaused(false);
+        }
+      }}
+    >
       <div className="privilege-title">
         <picture>
           <source media="(max-width: 767px)" srcSet="/assets/mobile/benefits-headline.png" />
@@ -467,13 +658,46 @@ function Privileges() {
 
 function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }) {
   const [start, setStart] = useState(0);
+  const [autoPaused, setAutoPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const desktopVisibleCards = 3;
+  const desktopMaxStart = journeyCards.length - desktopVisibleCards;
+  const desktopStart = Math.min(start, desktopMaxStart);
+  const atDesktopStart = desktopStart === 0;
+  const atDesktopEnd = desktopStart === desktopMaxStart;
+
+  useEffect(() => {
+    if (autoPaused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setTimeout(() => {
+      const carousel = carouselRef.current;
+      if (!carousel) return;
+
+      const isMobile = carousel.clientWidth < 600;
+      const firstCard = carousel.querySelector<HTMLElement>(".journey-card");
+      const itemWidth = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+      const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+      const currentStart = Math.min(start, maxStart);
+      const nextIndex = currentStart >= maxStart ? 0 : currentStart + 1;
+
+      setStart(nextIndex);
+      carousel.scrollTo({
+        left: nextIndex * itemWidth,
+        behavior: "smooth",
+      });
+    }, 4500);
+
+    return () => window.clearTimeout(timer);
+  }, [autoPaused, desktopMaxStart, start]);
 
   const moveCarousel = (step: number) => {
     const carousel = carouselRef.current;
     if (!carousel) return;
-    const itemWidth = carousel.clientWidth < 600 ? 326 : 400;
-    const nextIndex = Math.max(0, Math.min(journeyCards.length - 1, start + step));
+    const isMobile = carousel.clientWidth < 600;
+    const firstCard = carousel.querySelector<HTMLElement>(".journey-card");
+    const itemWidth = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+    const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+    const nextIndex = Math.max(0, Math.min(maxStart, start + step));
     setStart(nextIndex);
     carousel.scrollTo({
       left: nextIndex * itemWidth,
@@ -482,7 +706,18 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
   };
 
   return (
-    <section className="journey" id="journey">
+    <section
+      className="journey"
+      id="journey"
+      onMouseEnter={() => setAutoPaused(true)}
+      onMouseLeave={() => setAutoPaused(false)}
+      onFocusCapture={() => setAutoPaused(true)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setAutoPaused(false);
+        }
+      }}
+    >
       <div className="journey-heading">
         <picture>
           <source media="(max-width: 767px)" srcSet="/assets/mobile/journey-headline.png" />
@@ -499,16 +734,20 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
         type="button"
         aria-label="Chương trình trước"
         onClick={() => moveCarousel(-1)}
+        disabled={atDesktopStart}
       >
         <img src="/assets/chevron-left.svg" alt="" />
       </button>
 
       <div
-        className="journey-cards"
+        className={`journey-cards ${atDesktopStart ? "fade-right" : atDesktopEnd ? "fade-left" : "fade-both"}`}
         ref={carouselRef}
         onScroll={(e) => {
-          const step = e.currentTarget.clientWidth < 600 ? 326 : 400;
-          setStart(Math.min(journeyCards.length - 1, Math.round(e.currentTarget.scrollLeft / step)));
+          const isMobile = e.currentTarget.clientWidth < 600;
+          const firstCard = e.currentTarget.querySelector<HTMLElement>(".journey-card");
+          const step = isMobile ? (firstCard?.offsetWidth ?? 310) + 16 : 400;
+          const maxStart = isMobile ? journeyCards.length - 1 : desktopMaxStart;
+          setStart(Math.min(maxStart, Math.round(e.currentTarget.scrollLeft / step)));
         }}
       >
         {journeyCards.map((card, idx) => (
@@ -538,17 +777,33 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
         type="button"
         aria-label="Chương trình tiếp theo"
         onClick={() => moveCarousel(1)}
+        disabled={atDesktopEnd}
       >
         <img src="/assets/chevron-right.svg" alt="" />
       </button>
 
-      <div className="dots" aria-hidden="true">
+      <div className="dots" role="group" aria-label="Vị trí băng chuyền chương trình">
+        {Array.from({ length: desktopMaxStart + 1 }, (_, index) => (
+          <button
+            type="button"
+            key={index}
+            className={index === desktopStart ? "active" : ""}
+            aria-label={`Hiển thị chương trình ${index + 1} đến ${index + desktopVisibleCards}`}
+            aria-current={index === desktopStart ? "true" : undefined}
+            onClick={() => moveCarousel(index - desktopStart)}
+          />
+        ))}
+      </div>
+
+      <div className="mobile-journey-pagination" role="group" aria-label="Vị trí chương trình trên thiết bị di động">
         {journeyCards.map((_, index) => (
-          <span
+          <button
+            type="button"
             key={index}
             className={index === start ? "active" : ""}
+            aria-label={`Hiển thị chương trình ${index + 1} trên ${journeyCards.length}`}
+            aria-current={index === start ? "true" : undefined}
             onClick={() => moveCarousel(index - start)}
-            style={{ cursor: "pointer" }}
           />
         ))}
       </div>
@@ -681,9 +936,14 @@ function Jobs({ onSelectJob }: { onSelectJob: (job: JobItem) => void }) {
         })}
       </div>
 
-      <PillButton blue onClick={() => onSelectJob(technologyJobs[0])}>
-        Xem tất cả việc làm
-      </PillButton>
+      <a
+        className="pill-button pill-blue"
+        href="https://fptjobs.com/"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <span>Xem tất cả việc làm</span>
+      </a>
     </section>
   );
 }
@@ -721,69 +981,61 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
       </div>
 
       <p className="connect-subtitle">
-        Để lại thông tin ngay, đội ngũ Tuyển dụng sẽ gửi đến bạn những cơ hội đo ni đóng giày theo đúng ngành học!
+        Để lại thông tin ngay, đội ngũ Tuyển dụng sẽ gửi đến<br className="mobile-connect-break" /> bạn những cơ hội đo ni đóng giày theo đúng ngành học!
       </p>
 
       <form className="connect-form" id="connect-form" onSubmit={handleSubmit}>
         <label className="form-field">
-          <span>Họ và tên</span>
+          <span>Họ và tên *</span>
           <input required placeholder="Nguyễn Văn A" />
         </label>
 
         <label className="form-field">
-          <span>Số điện thoại</span>
+          <span>Số điện thoại *</span>
           <input required type="tel" placeholder="0987654321" />
         </label>
 
         <label className="form-field">
-          <span>Email</span>
+          <span>Email *</span>
           <input required type="email" placeholder="example@gmail.com" />
         </label>
 
         <label className="form-field">
-          <span>Trường đại học/ cao đẳng</span>
+          <span>Trường đại học/ cao đẳng *</span>
           <input required placeholder="Đại học FPT, Bách Khoa..." />
         </label>
 
         <label className="form-field">
-          <span>Thời gian dự kiến tốt nghiệp</span>
+          <span>Thời gian dự kiến tốt nghiệp *</span>
+          <input required type="month" aria-label="Tháng và năm dự kiến tốt nghiệp" />
+        </label>
+
+        <label className="form-field">
+          <span>Khu vực mong muốn làm việc *</span>
           <select defaultValue="" required>
             <option value="" disabled>
               Lựa chọn...
             </option>
-            <option value="2026">2026</option>
-            <option value="2027">2027</option>
-            <option value="2028">2028</option>
-            <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
+            {workLocations.map((location) => (
+              <option key={location} value={location}>{location}</option>
+            ))}
           </select>
         </label>
 
         <label className="form-field">
-          <span>Khu vực mong muốn làm việc</span>
+          <span>Vị trí mong muốn ứng tuyển *</span>
           <select defaultValue="" required>
             <option value="" disabled>
               Lựa chọn...
             </option>
-            <option value="Hà Nội">Hà Nội</option>
-            <option value="Hồ Chí Minh">Hồ Chí Minh</option>            <option value="Đà Nẵng">Đà Nẵng</option>
-            <option value="Khác">Tỉnh thành khác</option>
-          </select>
-        </label>
-
-        <label className="form-field">
-          <span>Vị trí mong muốn ứng tuyển</span>
-          <select defaultValue="" required>
-            <option value="" disabled>
-              Lựa chọn...
-            </option>
-            <option value="Công nghệ - Bán dẫn">Công nghệ - Bán dẫn</option>
-            <option value="Kinh doanh - Dịch vụ - Kỹ thuật">Kinh doanh - Dịch vụ - Kỹ thuật</option>
-            <option value="Văn phòng">Văn phòng</option>
+            {jobPreferenceOptions.map((jobTitle) => (
+              <option key={jobTitle} value={jobTitle}>{jobTitle}</option>
+            ))}
           </select>
         </label>
 
         <label className="form-field upload-field">
-          <span>Upload CV (không bắt buộc)</span>
+          <span>Upload CV</span>
           <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} aria-label="Upload CV" />
           <b>{fileName ? `✓ ${fileName}` : "Upload"}</b>
         </label>
@@ -827,7 +1079,7 @@ function Footer() {
         <div className="contact-card">
           <div className="contact-grid">
             <a href="https://fpt.vn" target="_blank" rel="noopener noreferrer" className="contact-item">
-              <span className="contact-icon"><IconLocation /></span>
+              <span className="contact-icon"><ContactLocationIcon /></span>
               <div className="contact-info">
                 <strong>Văn phòng giao dịch</strong>
                 <span>FPT Telecom</span>
@@ -835,7 +1087,7 @@ function Footer() {
             </a>
 
             <a href="https://www.facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" className="contact-item">
-              <span className="contact-icon"><IconFacebook /></span>
+              <span className="contact-icon"><ContactFacebookIcon /></span>
               <div className="contact-info">
                 <strong>Tuyển dụng FPT Telecom</strong>
                 <span>Facebook</span>
@@ -843,7 +1095,7 @@ function Footer() {
             </a>
 
             <a href="https://www.tiktok.com/@nhacao" target="_blank" rel="noopener noreferrer" className="contact-item">
-              <span className="contact-icon"><IconTikTok /></span>
+              <span className="contact-icon"><ContactTikTokIcon /></span>
               <div className="contact-info">
                 <strong>Nhà Cáo</strong>
                 <span>TikTok</span>
@@ -851,7 +1103,7 @@ function Footer() {
             </a>
 
             <a href="https://www.linkedin.com/company/fpt-telecom" target="_blank" rel="noopener noreferrer" className="contact-item">
-              <span className="contact-icon"><IconLinkedIn /></span>
+              <span className="contact-icon"><ContactLinkedInIcon /></span>
               <div className="contact-info">
                 <strong>FPT Telecom</strong>
                 <span>LinkedIn</span>
@@ -859,7 +1111,7 @@ function Footer() {
             </a>
 
             <a href="tel:02873002222" className="contact-item">
-              <span className="contact-icon"><IconPhone /></span>
+              <span className="contact-icon"><ContactPhoneIcon /></span>
               <div className="contact-info">
                 <strong>028 7300 2222</strong>
                 <span>Phone</span>
@@ -867,7 +1119,7 @@ function Footer() {
             </a>
 
             <a href="mailto:ftelhr.tuyendung@fpt.com" className="contact-item">
-              <span className="contact-icon"><IconEmail /></span>
+              <span className="contact-icon"><ContactEmailIcon /></span>
               <div className="contact-info">
                 <strong>ftelhr.tuyendung@fpt.com</strong>
                 <span>Email</span>
@@ -883,6 +1135,12 @@ function Footer() {
 
       {/* Main Corporate Footer */}
       <div className="footer-body">
+        <div className="footer-left-bands" aria-hidden="true">
+          <span className="footer-band footer-band-blue" />
+          <span className="footer-band footer-band-orange" />
+          <span className="footer-band footer-band-green" />
+        </div>
+
         <div className="company-header-card">
           <img src="/assets/logo.png" alt="FPT Telecom" className="footer-logo" />
           <div className="company-titles">
@@ -989,17 +1247,32 @@ function Footer() {
               </div>
             )}
           </div>
+
+          <div className="footer-accordion-item">
+            <button type="button" className="accordion-toggle" onClick={() => toggleSection("students")}>
+              <span>Dành cho sinh viên</span>
+              <span>{openSection === "students" ? "▲" : "▼"}</span>
+            </button>
+            {openSection === "students" && (
+              <div className="accordion-content">
+                <p>Chương trình thực tập</p>
+                <p>FPT Tour</p>
+                <p>Career Talk &amp; Hội thảo định hướng</p>
+                <p>Hợp tác cùng các trường đại học</p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Footer Social & Meta Bar */}
         <div className="footer-meta-bar">
           <div className="meta-left">
-            <span>Theo dõi các kênh chính thức của FPT Telecom</span>
+            <span>Theo dõi các kênh chính thức<br className="mobile-meta-break" /> của FPT Telecom</span>
             <div className="social-icons">
-              <a href="https://facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><IconFacebook /></a>
-              <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube"><IconTikTok /></a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><IconLinkedIn /></a>
-              <a href="https://zalo.me" target="_blank" rel="noopener noreferrer" aria-label="Zalo"><IconPhone /></a>
+              <a href="https://www.facebook.com/fpttelecom" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><ContactFacebookIcon /></a>
+              <a href="https://www.tiktok.com/@nhacao" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><ContactTikTokIcon /></a>
+              <a href="https://www.linkedin.com/company/fpt-telecom" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><ContactLinkedInIcon /></a>
+              <a href="tel:19006600" aria-label="Hotline"><ContactPhoneIcon /></a>
             </div>
           </div>
 
@@ -1034,19 +1307,10 @@ function JobModal({ job, onClose }: { job: JobItem | null; onClose: () => void }
         <p className="modal-location"><IconLocation /> {job.location || "Hà Nội - Hồ Chí Minh"}</p>
         <hr className="modal-divider" />
 
-        <h3>Mô tả công việc</h3>
-        <p>{job.description}</p>
-
-        <h3>Yêu cầu ứng viên</h3>
+        <h3>Nội dung công việc</h3>
         <ul>
-          {job.requirements ? (
-            job.requirements.map((req, i) => <li key={i}>{req}</li>)
-          ) : (
-            <>
-              <li>Tốt nghiệp ĐH/CĐ chuyên ngành liên quan</li>
-              <li>Chủ động, ham học hỏi và có tư duy logic tốt</li>
-            </>
-          )}
+          <li>{job.description}</li>
+          {job.details?.map((detail, i) => <li key={i}>{detail}</li>)}
         </ul>
 
         <div className="modal-actions">
