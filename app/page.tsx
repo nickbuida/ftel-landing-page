@@ -21,9 +21,115 @@ type JourneyCard = {
   mobileImage: string;
   title: React.ReactNode;
   body: string;
-  tag?: string;
-  fullDetails?: string;
 };
+
+function useSectionNavigation() {
+  useEffect(() => {
+    let animationFrame: number | null = null;
+    let removeInterruptListeners = () => {};
+
+    const stopAnimation = () => {
+      if (animationFrame !== null) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+      }
+      removeInterruptListeners();
+    };
+
+    const scrollTo = (top: number) => {
+      stopAnimation();
+
+      const start = window.scrollY;
+      const distance = top - start;
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (reduceMotion || Math.abs(distance) < 2) {
+        window.scrollTo(0, top);
+        return;
+      }
+
+      const duration = Math.min(650, Math.max(320, Math.abs(distance) * 0.18));
+      const startedAt = performance.now();
+      const interrupt = () => stopAnimation();
+      const interruptEvents = ["wheel", "touchstart", "pointerdown", "keydown"] as const;
+
+      interruptEvents.forEach((eventName) => {
+        window.addEventListener(eventName, interrupt, { passive: true });
+      });
+      removeInterruptListeners = () => {
+        interruptEvents.forEach((eventName) => {
+          window.removeEventListener(eventName, interrupt);
+        });
+        removeInterruptListeners = () => {};
+      };
+
+      const step = (now: number) => {
+        const progress = Math.min(1, (now - startedAt) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        window.scrollTo(0, start + distance * eased);
+
+        if (progress < 1) {
+          animationFrame = window.requestAnimationFrame(step);
+        } else {
+          animationFrame = null;
+          removeInterruptListeners();
+        }
+      };
+
+      animationFrame = window.requestAnimationFrame(step);
+    };
+
+    const handleSectionClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+
+      const clickedElement = event.target instanceof Element ? event.target : null;
+      const anchor = clickedElement?.closest<HTMLAnchorElement>('a[href^="#"]');
+      if (!anchor) return;
+
+      const hash = anchor.getAttribute("href");
+      if (hash === null) return;
+
+      const target = hash === "#" ? null : document.querySelector<HTMLElement>(hash);
+      if (hash !== "#" && !target) return;
+
+      event.preventDefault();
+
+      const navigationOffset = window.matchMedia("(max-width: 767px)").matches ? 88 : 24;
+      const targetTop = target
+        ? Math.max(0, window.scrollY + target.getBoundingClientRect().top - navigationOffset)
+        : 0;
+
+      window.history.replaceState(null, "", hash || "#");
+      scrollTo(targetTop);
+    };
+
+    document.addEventListener("click", handleSectionClick);
+    return () => {
+      document.removeEventListener("click", handleSectionClick);
+      stopAnimation();
+    };
+  }, []);
+}
+
+function validateVietnamesePhone(value: string) {
+  const normalized = value.replace(/[\s-]/g, "");
+  if (!normalized) return "Vui lòng nhập số điện thoại.";
+  if (!/^(?:0\d{9,10}|\+84\d{9,10})$/.test(normalized)) {
+    return "Số điện thoại phải bắt đầu bằng 0 hoặc +84 và có 10–11 chữ số.";
+  }
+  return "";
+}
+
+function validateEmail(value: string) {
+  const normalized = value.trim();
+  if (!normalized) return "Vui lòng nhập email.";
+  if (!/^[^\s@]+@(?:[^\s@.]+\.)+[^\s@.]{2,}$/.test(normalized)) {
+    return "Email phải có định dạng tên@domain.com.";
+  }
+  return "";
+}
 
 // Data
 const journeyCards: JourneyCard[] = [
@@ -32,48 +138,36 @@ const journeyCards: JourneyCard[] = [
     mobileImage: "/assets/mobile/internship-card-image.png",
     title: <>FPT Telecom<br />Internship</>,
     body: "Chương trình thực tập đa ngành đưa bạn vào các dự án thực tế cùng Mentor 1-1 để khởi đầu sự nghiệp vững chắc.",
-    tag: "Thực tập 2026",
-    fullDetails: "FPT Telecom Internship mang đến cơ hội trải nghiệm môi trường làm việc thực tế dành cho sinh viên năm 3, 4. Bạn sẽ được phân công Mentor 1-1 hướng dẫn trực tiếp, tham gia phát triển sản phẩm thật và có cơ hội nhận offer chính thức ngay sau khi kết thúc kỳ thực tập.",
   },
   {
     image: "/assets/card-tech.png",
     mobileImage: "/assets/mobile/technology-trainee-image.png",
     title: <>Sinh viên<br />công nghệ tập sự</>,
     body: "Chương trình tuyển dụng dành riêng cho sinh viên khối Công nghệ - Kỹ thuật với lộ trình phát triển thành nhân sự nòng cốt và thu nhập tới 150 triệu/năm",
-    tag: "Khối Công Nghệ",
-    fullDetails: "Dành riêng cho sinh viên ngành CNTT, Điện tử Viễn thông, Khoa học Máy tính. Tham gia các dự án trọng điểm về Cloud, Big Data, AI, Network Infrastructure với mức thu nhập hấp dẫn lên đến 150 triệu/năm.",
   },
   {
     image: "/assets/card-leaders.png",
     mobileImage: "/assets/mobile/nextgen-leaders-image.png",
     title: <>Nextgen Leaders</>,
     body: "Chương trình tuyển dụng dành riêng cho sinh viên khối ngành Kinh tế với lộ trình đào tạo bứt phá thành thế hệ Quản lý kế cận tại FTEL.",
-    tag: "Khối Kinh Tế",
-    fullDetails: "Chương trình đào tạo Fast-track phát triển thế hệ lãnh đạo trẻ kế cận cho FPT Telecom. Bạn sẽ trải qua các vòng luân chuyển phòng ban, làm việc trực tiếp với Ban Giám đốc và nhận lộ trình thăng tiến siêu tốc.",
   },
   {
     image: "/assets/card-careerfair.png",
     mobileImage: "/assets/mobile/career-fair-image.png",
     title: <>Career talk<br />& Hội thảo định hướng</>,
     body: "Chuỗi hội thảo hướng nghiệp trực tiếp tại giảng đường giúp bạn nắm bắt xu hướng thị trường và bí kíp săn job chất.",
-    tag: "Sự kiện",
-    fullDetails: "Gặp gỡ trực tiếp các diễn giả, chuyên gia hàng đầu từ FPT Telecom. Nhận tư vấn sửa CV, phỏng vấn thử 1-1 và cập nhật các xu hướng tuyển dụng hot nhất.",
   },
   {
     image: "/assets/card-tour.png",
     mobileImage: "/assets/mobile/fpt-tour-image.png",
     title: <>FPT Tour</>,
     body: "Thăm quan văn phòng công nghệ xịn mịn, trải nghiệm thực tế văn hóa sáng tạo.",
-    tag: "Trải nghiệm",
-    fullDetails: "Chuyến tham quan trực tiếp đại bản doanh FPT Tower và FPT Tan Thuan. Khám phá không gian làm việc hiện đại, các khu tiện ích giải trí và giao lưu cùng cán bộ nhân viên.",
   },
   {
     image: "/assets/card-university.png",
     mobileImage: "/assets/mobile/university-partnership-image.png",
     title: <>Hợp tác cùng<br />các trường đại học</>,
     body: "Ký kết MOU chiến lược cùng hàng loạt trường Đại học, Cao đẳng, đồng hành bền vững cùng sinh viên qua đa dạng các hoạt động.",
-    tag: "Hợp tác",
-    fullDetails: "FPT Telecom hợp tác chiến lược với hơn 50+ trường Đại học toàn quốc, tài trợ học bổng, tổ chức các cuộc thi công nghệ và tạo điều kiện đầu ra việc làm uy tín.",
   },
 ];
 
@@ -214,6 +308,8 @@ const jobCategories: JobCategory[] = [
   { id: "office", label: "Văn phòng", items: officeJobs },
   { id: "business", label: "Kinh doanh - Dịch vụ - Kỹ thuật", items: businessJobs },
 ];
+
+const graduationYears = Array.from({ length: 10 }, (_, index) => 2026 + index);
 
 // Helper UI Components
 function PillButton({ children, blue = false, type = "button", onClick }: { children: React.ReactNode; blue?: boolean; type?: "button" | "submit"; onClick?: () => void }) {
@@ -417,7 +513,7 @@ function About() {
         </div>
         <i />
         <div className="stat-orange">
-          <strong>15K TỶ</strong>
+          <strong>19.5 TỶ</strong>
           <span>Doanh thu</span>
         </div>
       </div>
@@ -538,7 +634,7 @@ function Privileges() {
   );
 }
 
-function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }) {
+function Journey() {
   const [start, setStart] = useState(0);
   const [autoPaused, setAutoPaused] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -636,8 +732,6 @@ function Journey({ onSelectCard }: { onSelectCard: (card: JourneyCard) => void }
           <article
             className={card.image === "/assets/card-tour.png" ? "journey-card journey-card-tour" : "journey-card"}
             key={idx}
-            onClick={() => onSelectCard(card)}
-            style={{ cursor: "pointer" }}
           >
             <picture>
               <source media="(max-width: 767px)" srcSet={card.mobileImage} />
@@ -830,14 +924,51 @@ function Jobs({ onSelectJob }: { onSelectJob: (job: JobItem) => void }) {
   );
 }
 
-function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
+function Connect({
+  onShowToast,
+  preferredPosition,
+  onPreferredPositionChange,
+}: {
+  onShowToast: (msg: string) => void;
+  preferredPosition: string;
+  onPreferredPositionChange: (position: string) => void;
+}) {
   const [fileName, setFileName] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({ phone: "", email: "" });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    const nextErrors = {
+      phone: validateVietnamesePhone(phone),
+      email: validateEmail(email),
+    };
+    setFieldErrors(nextErrors);
+
+    if (nextErrors.phone || nextErrors.email) {
+      document.getElementById(nextErrors.phone ? "connect-phone" : "connect-email")?.focus();
+      return;
+    }
+
     setSubmitted(true);
-    onShowToast("🎉 Cảm ơn bạn! Đã gửi thông tin đăng ký thành công. Đội ngũ Tuyển dụng FPT Telecom sẽ liên hệ bạn sớm nhất!");
+    onShowToast("🎉 Cảm ơn bạn! Đã gửi thông tin đăng ký thành công.\nĐội ngũ Tuyển dụng FPT Telecom sẽ liên hệ bạn sớm nhất!");
+  };
+
+  const updatePhone = (value: string) => {
+    setPhone(value);
+    if (fieldErrors.phone) {
+      setFieldErrors((current) => ({ ...current, phone: validateVietnamesePhone(value) }));
+    }
+  };
+
+  const updateEmail = (value: string) => {
+    setEmail(value);
+    if (fieldErrors.email) {
+      setFieldErrors((current) => ({ ...current, email: validateEmail(value) }));
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -872,14 +1003,43 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
           <input required placeholder="Nguyễn Văn A" />
         </label>
 
-        <label className="form-field">
+        <label className={`form-field ${fieldErrors.phone ? "has-error" : ""}`}>
           <span>Số điện thoại *</span>
-          <input required type="tel" placeholder="0987654321" />
+          <input
+            id="connect-phone"
+            required
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            value={phone}
+            pattern="(?:0[0-9](?:[ -]?[0-9]){8,9}|\+84[0-9](?:[ -]?[0-9]){8,9})"
+            placeholder="0987654321"
+            aria-invalid={Boolean(fieldErrors.phone)}
+            aria-describedby="connect-phone-error"
+            onChange={(event) => updatePhone(event.target.value)}
+            onBlur={() => setFieldErrors((current) => ({ ...current, phone: validateVietnamesePhone(phone) }))}
+            onInvalid={() => setFieldErrors((current) => ({ ...current, phone: validateVietnamesePhone(phone) }))}
+          />
+          {fieldErrors.phone && <small className="form-error" id="connect-phone-error">{fieldErrors.phone}</small>}
         </label>
 
-        <label className="form-field">
+        <label className={`form-field ${fieldErrors.email ? "has-error" : ""}`}>
           <span>Email *</span>
-          <input required type="email" placeholder="example@gmail.com" />
+          <input
+            id="connect-email"
+            required
+            type="email"
+            inputMode="email"
+            autoComplete="email"
+            value={email}
+            placeholder="example@gmail.com"
+            aria-invalid={Boolean(fieldErrors.email)}
+            aria-describedby="connect-email-error"
+            onChange={(event) => updateEmail(event.target.value)}
+            onBlur={() => setFieldErrors((current) => ({ ...current, email: validateEmail(email) }))}
+            onInvalid={() => setFieldErrors((current) => ({ ...current, email: validateEmail(email) }))}
+          />
+          {fieldErrors.email && <small className="form-error" id="connect-email-error">{fieldErrors.email}</small>}
         </label>
 
         <label className="form-field">
@@ -889,7 +1049,24 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
 
         <label className="form-field">
           <span>Thời gian dự kiến tốt nghiệp *</span>
-          <input required type="month" />
+          <div className="graduation-selects">
+            <select required defaultValue="" aria-label="Ngày tốt nghiệp dự kiến">
+              <option value="" disabled>Ngày</option>
+              {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
+                <option value={day} key={day}>{day}</option>
+              ))}
+            </select>
+            <select required defaultValue="" aria-label="Tháng tốt nghiệp dự kiến">
+              <option value="" disabled>Tháng</option>
+              {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (
+                <option value={month} key={month}>Tháng {month}</option>
+              ))}
+            </select>
+            <select required defaultValue="" aria-label="Năm tốt nghiệp dự kiến">
+              <option value="" disabled>Năm</option>
+              {graduationYears.map((year) => <option value={year} key={year}>{year}</option>)}
+            </select>
+          </div>
         </label>
 
         <label className="form-field">
@@ -937,7 +1114,11 @@ function Connect({ onShowToast }: { onShowToast: (msg: string) => void }) {
 
         <label className="form-field">
           <span>Vị trí mong muốn ứng tuyển *</span>
-          <select defaultValue="" required>
+          <select
+            value={preferredPosition}
+            onChange={(event) => onPreferredPositionChange(event.target.value)}
+            required
+          >
             <option value="" disabled>
               Lựa chọn...
             </option>
@@ -1073,8 +1254,8 @@ function Footer() {
         <div className="footer-columns-desktop">
           <div className="footer-col col-main">
             <h4>Trung tâm Thu hút Nguồn nhân lực</h4>
-            <p>FPT Tower, số 10 Phạm Văn Bạch, Cầu Giấy, Hà Nội</p>
-            <p>FPT Tân Thuận, KCX Tân Thuận, Quận 7, TP. Hồ Chí Minh</p>
+            <p>FPT Tower, số 10 Phạm Văn Bạch, phường Cầu Giấy, Hà Nội</p>
+            <p>FPT Tân Thuận 2, KCX Tân Thuận, phường Tân Thuận, TP. Hồ Chí Minh</p>
             <p><a href="mailto:ftelhr.tuyendung@fpt.com">ftelhr.tuyendung@fpt.com</a></p>
             <p><a href="tel:02873002222">028 7300 2222</a></p>
           </div>
@@ -1117,8 +1298,8 @@ function Footer() {
             </button>
             {openSection === "hr" && (
               <div className="accordion-content">
-                <p>FPT Tower, số 10 Phạm Văn Bạch, Cầu Giấy, Hà Nội</p>
-                <p>FPT Tân Thuận, KCX Tân Thuận, Quận 7, TP. Hồ Chí Minh</p>
+                <p>FPT Tower, số 10 Phạm Văn Bạch, phường Cầu Giấy, Hà Nội</p>
+                <p>FPT Tân Thuận 2, KCX Tân Thuận, phường Tân Thuận, TP. Hồ Chí Minh</p>
                 <p>ftelhr.tuyendung@fpt.com</p>
                 <p>028 7300 2222</p>
               </div>
@@ -1216,7 +1397,15 @@ function Footer() {
 }
 
 // Modals
-function JobModal({ job, onClose }: { job: JobItem | null; onClose: () => void }) {
+function JobModal({
+  job,
+  onClose,
+  onApply,
+}: {
+  job: JobItem | null;
+  onClose: () => void;
+  onApply: (position: string) => void;
+}) {
   if (!job) return null;
   return (
     <div className="modal-backdrop" onClick={onClose}>
@@ -1232,29 +1421,8 @@ function JobModal({ job, onClose }: { job: JobItem | null; onClose: () => void }
         </ul>
 
         <div className="modal-actions">
-          <a href="#connect" onClick={onClose} style={{ textDecoration: "none" }}>
+          <a href="#connect" onClick={() => onApply(job.title)} style={{ textDecoration: "none" }}>
             <PillButton>Ứng tuyển ngay</PillButton>
-          </a>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function JourneyModal({ card, onClose }: { card: JourneyCard | null; onClose: () => void }) {
-  if (!card) return null;
-  return (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={onClose}>✕</button>
-        {card.tag && <span className="modal-badge">{card.tag}</span>}
-        <h2>{card.title}</h2>
-        <hr className="modal-divider" />
-        <p style={{ fontSize: "16px", lineHeight: "24px", color: "#3a4459", marginBottom: "16px" }}>{card.body}</p>
-        <p style={{ fontSize: "15px", lineHeight: "22px", color: "#637381" }}>{card.fullDetails || card.body}</p>
-        <div className="modal-actions" style={{ marginTop: "24px" }}>
-          <a href="#connect" onClick={onClose} style={{ textDecoration: "none" }}>
-            <PillButton>Đăng ký tham gia</PillButton>
           </a>
         </div>
       </div>
@@ -1308,19 +1476,14 @@ function AuthModal({ mode, onClose, onShowToast }: { mode: "login" | "register";
 }
 
 function Toast({ message, onClose }: { message: string | null; onClose: () => void }) {
-  useEffect(() => {
-    if (message) {
-      const timer = setTimeout(onClose, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [message, onClose]);
-
   if (!message) return null;
 
   return (
-    <div className="toast-notification">
-      <span>{message}</span>
-      <button onClick={onClose}>✕</button>
+    <div className="toast-notification" role="status" aria-live="polite" aria-atomic="true">
+      <div className="toast-copy">
+        {message.split("\n").map((line) => <span key={line}>{line}</span>)}
+      </div>
+      <button type="button" aria-label="Đóng thông báo" onClick={onClose}>✕</button>
     </div>
   );
 }
@@ -1328,9 +1491,11 @@ function Toast({ message, onClose }: { message: string | null; onClose: () => vo
 // Main Page Shell
 export default function Home() {
   const [selectedJob, setSelectedJob] = useState<JobItem | null>(null);
-  const [selectedJourney, setSelectedJourney] = useState<JourneyCard | null>(null);
   const [authMode, setAuthMode] = useState<"login" | "register" | null>(null);
   const [toastMsg, setToastMsg] = useState<string | null>(null);
+  const [preferredPosition, setPreferredPosition] = useState("");
+
+  useSectionNavigation();
 
   return (
     <main className="page-shell">
@@ -1340,15 +1505,25 @@ export default function Home() {
         <DecorativeBackground />
         <About />
         <Privileges />
-        <Journey onSelectCard={(card) => setSelectedJourney(card)} />
+        <Journey />
         <Jobs onSelectJob={(job) => setSelectedJob(job)} />
-        <Connect onShowToast={(msg) => setToastMsg(msg)} />
+        <Connect
+          onShowToast={(msg) => setToastMsg(msg)}
+          preferredPosition={preferredPosition}
+          onPreferredPositionChange={setPreferredPosition}
+        />
         <Footer />
       </div>
 
       {/* Modals & Overlays */}
-      <JobModal job={selectedJob} onClose={() => setSelectedJob(null)} />
-      <JourneyModal card={selectedJourney} onClose={() => setSelectedJourney(null)} />
+      <JobModal
+        job={selectedJob}
+        onClose={() => setSelectedJob(null)}
+        onApply={(position) => {
+          setPreferredPosition(position);
+          setSelectedJob(null);
+        }}
+      />
       {authMode && (
         <AuthModal
           mode={authMode}

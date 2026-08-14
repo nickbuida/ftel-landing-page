@@ -35,6 +35,8 @@ test("server-renders the FPT Telecom Career Booming page", async () => {
   assert.match(html, /Đặc quyền thực tế bạn nhận được/);
   assert.match(html, /Hành trình đồng hành kiến tạo tương lai/);
   assert.match(html, /Vũ trụ nghề nghiệp tại FPT Telecom/);
+  assert.match(html, /19\.5 TỶ/);
+  assert.doesNotMatch(html, /15K TỶ/);
   assert.match(html, /Tôi đồng ý nhận thông tin việc làm và các cơ hội sự nghiệp từ FPT Telecom\./);
   assert.match(html, /class="footer-container"/);
   assert.match(html, /Kết nối với chúng tôi/);
@@ -62,6 +64,14 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(css, /\.contact-mascot\s*\{[^}]*overflow:\s*hidden;/s);
   assert.match(css, /\.contact-card\s*\{[^}]*height:\s*220px;/s);
   assert.match(css, /\.contact-mascot\s*\{[^}]*top:\s*0;[^}]*bottom:\s*0;/s);
+  assert.match(css, /\.modal-content\s*\{[^}]*animation:\s*modalPop\s+0\.22s\s+ease-out;[^}]*transform-origin:\s*center;/s);
+  assert.match(css, /@keyframes modalPop\s*\{[\s\S]*?transform:\s*scale\(\.97\);[\s\S]*?transform:\s*scale\(1\);[\s\S]*?\}/);
+  assert.match(page, /Đã gửi thông tin đăng ký thành công\.\\nĐội ngũ Tuyển dụng FPT Telecom/);
+  const toastComponent = page.match(/function Toast[\s\S]*?\/\/ Main Page Shell/)?.[0] ?? "";
+  assert.doesNotMatch(toastComponent, /setTimeout|clearTimeout/);
+  assert.match(toastComponent, /message\.split\("\\n"\)/);
+  assert.match(toastComponent, /aria-label="Đóng thông báo"/);
+  assert.match(css, /\.toast-copy span\s*\{[^}]*white-space:\s*nowrap;/s);
   assert.match(css, /\.company-titles\s*\{[^}]*margin-left:\s*auto;[^}]*text-align:\s*right;/s);
   assert.match(css, /\.footer-columns-desktop\s*>\s*\.footer-col:not\(\.col-main\)\s*\{[^}]*text-align:\s*right;/s);
   assert.match(page, /className="footer-left-bands"/);
@@ -69,6 +79,9 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(css, /\.footer-left-bands\s*\{[^}]*left:\s*-135px;[^}]*width:\s*118px;[^}]*overflow:\s*hidden;/s);
   assert.match(css, /\.footer-left-bands img\s*\{[^}]*top:\s*-154px;[^}]*width:\s*1440px;[^}]*mix-blend-mode:\s*multiply;/s);
   assert.match(page, /https:\/\/www\.tiktok\.com\/@tuyendungfpttelecom/g);
+  assert.equal((page.match(/FPT Tower, số 10 Phạm Văn Bạch, phường Cầu Giấy, Hà Nội/g) ?? []).length, 2);
+  assert.equal((page.match(/FPT Tân Thuận 2, KCX Tân Thuận, phường Tân Thuận, TP\. Hồ Chí Minh/g) ?? []).length, 2);
+  assert.doesNotMatch(page, /Phạm Văn Bạch, Cầu Giấy|FPT Tân Thuận, KCX Tân Thuận, Quận 7|FPT Tan Thuan/);
   assert.match(page, /href="https:\/\/www\.linkedin\.com\/company\/fpt-telecom"[^>]*aria-label="LinkedIn"/);
   assert.match(page, /href="tel:02873002222" aria-label="028 7300 2222"/);
   assert.match(page, /\/assets\/icons\/facebook-f\.svg/);
@@ -87,6 +100,9 @@ test("keeps the audited Figma frame and original assets in place", async () => {
   assert.match(page, /prefers-reduced-motion:\s*reduce/);
   assert.match(page, /onMouseEnter=\{\(\) => setAutoPaused\(true\)\}/);
   assert.match(page, /card\.image === "\/assets\/card-tour\.png" \? "journey-card journey-card-tour" : "journey-card"/);
+  assert.match(page, /function Journey\(\)/);
+  assert.doesNotMatch(page, /JourneyModal|selectedJourney|onSelectCard|onClick=\{\(\) => onSelectCard\(card\)\}|cursor: "pointer"/);
+  assert.match(css, /\.journey-card:hover\s*\{[^}]*transform:\s*translateY\(-6px\);/s);
   assert.match(css, /@media \(min-width:\s*768px\)[\s\S]*?\.journey-card-tour \.journey-photo\s*\{[^}]*left:\s*-36px;[^}]*top:\s*-110px;[^}]*width:\s*442px;[^}]*height:\s*442px;/s);
   assert.match(css, /@media \(min-width:\s*768px\)[\s\S]*?\.journey-card-tour \.journey-overlay\s*\{[^}]*45%[^}]*\.48\) 60%[^}]*#fff 78%/s);
   assert.match(css, /@media \(min-width:\s*1440px\)[\s\S]*?\.page-shell\s*\{[^}]*width:\s*100%;[^}]*height:\s*350\.5555556vw;[^}]*overflow:\s*clip;[^}]*\}[\s\S]*?\.desktop-canvas\s*\{[^}]*margin:\s*0;[^}]*transform:\s*scale\(calc\(100vw \/ 1440px\)\);[^}]*transform-origin:\s*top left;/s);
@@ -127,6 +143,8 @@ test("adapts the same page tree to the mobile handoff", async () => {
 
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.desktop-canvas\s*\{[^}]*width:\s*100%;[^}]*min-height:\s*auto;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero\s*\{[^}]*top:\s*72px;[^}]*width:\s*100%;[^}]*height:\s*670px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.toast-notification\s*\{[^}]*width:\s*calc\(100% - 32px\);[^}]*border-radius:\s*24px;/s);
+  assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.toast-copy span\s*\{[^}]*white-space:\s*normal;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-back\s*\{[^}]*top:\s*-40px;[^}]*width:\s*1073\.693px;[^}]*height:\s*787px;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-title img\s*\{[^}]*left:\s*-11\.61%;[^}]*top:\s*-24\.24%;[^}]*width:\s*174\.91%;[^}]*height:\s*219\.96%;/s);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.hero-people\s*\{[^}]*top:\s*371px;[^}]*width:\s*334\.8px;[^}]*height:\s*324px;/s);
@@ -188,7 +206,14 @@ test("adapts the same page tree to the mobile handoff", async () => {
   ]) {
     assert.match(page, new RegExp(`<span>${label} \\*</span>`));
   }
-  assert.match(page, /<span>Thời gian dự kiến tốt nghiệp \*<\/span>[\s\S]*?<input required type="month" \/>/);
+  assert.doesNotMatch(page, /type="month"/);
+  assert.match(page, /<span>Thời gian dự kiến tốt nghiệp \*<\/span>[\s\S]*?className="graduation-selects"/);
+  assert.match(page, /aria-label="Ngày tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Ngày<\/option>/);
+  assert.match(page, /Array\.from\(\{ length: 31 \}, \(_, index\) => index \+ 1\)/);
+  assert.match(page, /aria-label="Tháng tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Tháng<\/option>/);
+  assert.match(page, /aria-label="Năm tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Năm<\/option>/);
+  assert.match(page, /const graduationYears = Array\.from\(\{ length: 10 \}, \(_, index\) => 2026 \+ index\);/);
+  assert.match(css, /\.graduation-selects\s*\{[^}]*grid-template-columns:\s*repeat\(3,minmax\(0,1fr\)\);/s);
   const locationField = page.match(/<span>Khu vực mong muốn làm việc \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
   const positionField = page.match(/<span>Vị trí mong muốn ứng tuyển \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
   assert.equal((locationField.match(/<option/g) ?? []).length, 35);
@@ -201,6 +226,24 @@ test("adapts the same page tree to the mobile handoff", async () => {
   }
   assert.match(page, /<span>Upload CV<\/span>/);
   assert.doesNotMatch(page, /Upload CV \(không bắt buộc\)|<option value="Công nghệ - Bán dẫn">/);
+  assert.match(page, /function validateVietnamesePhone\(value: string\)/);
+  assert.match(page, /\^\(\?:0\\d\{9,10\}\|\\\+84\\d\{9,10\}\)\$/);
+  assert.match(page, /function validateEmail\(value: string\)/);
+  assert.match(page, /Email phải có định dạng tên@domain\.com\./);
+  assert.match(page, /id="connect-phone"[\s\S]*?pattern="\(\?:0\[0-9\][\s\S]*?\\\+84\[0-9\]/);
+  assert.match(page, /id="connect-email"[\s\S]*?type="email"[\s\S]*?onBlur=/);
+  assert.match(page, /aria-invalid=\{Boolean\(fieldErrors\.phone\)\}/);
+  assert.match(page, /aria-invalid=\{Boolean\(fieldErrors\.email\)\}/);
+  assert.match(css, /\.form-error\s*\{[^}]*top:\s*78px;[^}]*font-size:\s*12px;/s);
+  assert.match(page, /const \[preferredPosition, setPreferredPosition\] = useState\(""\);/);
+  assert.match(page, /<select[\s\S]*?value=\{preferredPosition\}[\s\S]*?onChange=\{\(event\) => onPreferredPositionChange\(event\.target\.value\)\}[\s\S]*?required/);
+  assert.match(page, /href="#connect" onClick=\{\(\) => onApply\(job\.title\)\}/);
+  assert.match(page, /onApply=\{\(position\) => \{[\s\S]*?setPreferredPosition\(position\);[\s\S]*?setSelectedJob\(null\);/);
+  assert.match(page, /function useSectionNavigation\(\)/);
+  assert.match(page, /document\.addEventListener\("click", handleSectionClick\)/);
+  assert.match(page, /window\.addEventListener\(eventName, interrupt, \{ passive: true \}\)/);
+  assert.match(page, /useSectionNavigation\(\);/);
+  assert.match(css, /html\s*\{\s*scroll-behavior:\s*auto;\s*\}/);
   assert.match(page, /openCategory, setOpenCategory\] = useState\(jobCategories\[0\]\.id\)/);
   assert.match(page, /toggleSection\("students"\)[\s\S]*?Dành cho sinh viên/);
   assert.match(css, /@media \(max-width:\s*767px\)[\s\S]*?\.company-header-card\s*\{[^}]*align-items:\s*flex-start;[^}]*text-align:\s*left;/s);
