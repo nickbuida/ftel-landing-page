@@ -208,12 +208,11 @@ test("adapts the same page tree to the mobile handoff", async () => {
   }
   assert.doesNotMatch(page, /type="month"/);
   assert.match(page, /<span>Thời gian dự kiến tốt nghiệp \*<\/span>[\s\S]*?className="graduation-selects"/);
-  assert.match(page, /aria-label="Ngày tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Ngày<\/option>/);
-  assert.match(page, /Array\.from\(\{ length: 31 \}, \(_, index\) => index \+ 1\)/);
+  assert.doesNotMatch(page, /aria-label="Ngày tốt nghiệp dự kiến"|<option value="" disabled>Ngày<\/option>/);
   assert.match(page, /aria-label="Tháng tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Tháng<\/option>/);
   assert.match(page, /aria-label="Năm tốt nghiệp dự kiến"[\s\S]*?<option value="" disabled>Năm<\/option>/);
   assert.match(page, /const graduationYears = Array\.from\(\{ length: 10 \}, \(_, index\) => 2026 \+ index\);/);
-  assert.match(css, /\.graduation-selects\s*\{[^}]*grid-template-columns:\s*repeat\(3,minmax\(0,1fr\)\);/s);
+  assert.match(css, /\.graduation-selects\s*\{[^}]*grid-template-columns:\s*repeat\(2,minmax\(0,1fr\)\);/s);
   const locationField = page.match(/<span>Khu vực mong muốn làm việc \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
   const positionField = page.match(/<span>Vị trí mong muốn ứng tuyển \*<\/span>[\s\S]*?<\/select>/)?.[0] ?? "";
   assert.equal((locationField.match(/<option/g) ?? []).length, 35);

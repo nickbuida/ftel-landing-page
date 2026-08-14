@@ -1050,12 +1050,6 @@ function Connect({
         <label className="form-field">
           <span>Thời gian dự kiến tốt nghiệp *</span>
           <div className="graduation-selects">
-            <select required defaultValue="" aria-label="Ngày tốt nghiệp dự kiến">
-              <option value="" disabled>Ngày</option>
-              {Array.from({ length: 31 }, (_, index) => index + 1).map((day) => (
-                <option value={day} key={day}>{day}</option>
-              ))}
-            </select>
             <select required defaultValue="" aria-label="Tháng tốt nghiệp dự kiến">
               <option value="" disabled>Tháng</option>
               {Array.from({ length: 12 }, (_, index) => index + 1).map((month) => (

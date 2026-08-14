@@ -193,7 +193,7 @@ button { cursor: pointer; }
 .form-field input[aria-invalid="true"] { border-color: #ffb4a8; box-shadow: 0 0 0 3px rgba(255,90,1,.18); }
 .form-error { position: absolute; left: 14px; top: 78px; color: #fff; font-size: 12px; line-height: 16px; font-weight: 600; text-shadow: 0 1px 2px rgba(0,9,132,.7); }
 .form-field select { appearance: none; background: #fff url('/assets/form-chevron.svg') no-repeat right 18px center / 16px 9px; cursor: pointer; }
-.graduation-selects { position: absolute; left: 0; top: 28px; width: 370px; height: 48px; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; }
+.graduation-selects { position: absolute; left: 0; top: 28px; width: 370px; height: 48px; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
 .form-field .graduation-selects select { position: relative; left: auto; top: auto; width: 100%; height: 48px; padding-left: 14px; padding-right: 32px; background-position: right 12px center; }
 .upload-field input { position: absolute; opacity: 0; pointer-events: none; }
 .upload-field b { position: absolute; left: 0; top: 28px; width: 370px; height: 48px; border: 2px solid #25a8ff; border-radius: 40px; background: #fff; color: #25a8ff; font-size: 15px; font-weight: 600; text-align: center; display: grid; place-items: center; cursor: pointer; transition: background 0.2s ease; }
